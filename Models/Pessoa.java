@@ -3,7 +3,7 @@ package modulovendas.Models;
 import java.time.LocalDate;
 
 public class Pessoa {
-    private long pesCodigo;          // PES_CODIGO
+    private Integer pesCodigo;          // PES_CODIGO
     private String pesNome;          // PES_NOME
     private String pesFantasia;      // PES_FANTASIA
     private char pesFisica;          // PES_FISICA
@@ -27,7 +27,7 @@ public class Pessoa {
     public Pessoa() {
     }
 
-    public Pessoa(long pesCodigo, String pesNome, String pesFantasia, char pesFisica, String pesCpfCnpj, String pesRgIe, LocalDate pesCadastro, String pesEndereco, String pesNumero, String pesComplemento, String pesBairro, String pesCidade, String pesUf, String pesCep, String pesFone1, String pesFone2, String pesCelular, String pesSite, String pesEmail, char pesAtivo) {
+    public Pessoa(Integer pesCodigo, String pesNome, String pesFantasia, char pesFisica, String pesCpfCnpj, String pesRgIe, LocalDate pesCadastro, String pesEndereco, String pesNumero, String pesComplemento, String pesBairro, String pesCidade, String pesUf, String pesCep, String pesFone1, String pesFone2, String pesCelular, String pesSite, String pesEmail, char pesAtivo) {
         this.pesCodigo = pesCodigo;
         this.pesNome = pesNome;
         this.pesFantasia = pesFantasia;
@@ -72,11 +72,11 @@ public class Pessoa {
         this.pesAtivo = pesAtivo;
     }
 
-    public long getPesCodigo() {
+    public int getPesCodigo() {
         return pesCodigo;
     }
 
-    public void setPesCodigo(long pesCodigo) {
+    public void setPesCodigo(Integer pesCodigo) {
         this.pesCodigo = pesCodigo;
     }
 

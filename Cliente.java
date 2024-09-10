@@ -1,6 +1,13 @@
 package modulovendas;
 
+import modulovendas.Controllers.ClienteController;
+import modulovendas.Models.ClienteModel;
+
 import javax.swing.*;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class Cliente extends JPanel {
 
@@ -15,12 +22,14 @@ public class Cliente extends JPanel {
     
     private JButton btnIncluir, btnAlterar, btnConsultar, btnExcluir;
 
+
+
     public Cliente() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
-
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
+        configurar();
     }
 
     public void instanciar() {
@@ -196,4 +205,55 @@ public class Cliente extends JPanel {
         btnConsultar.setBounds(760, 0, 100, 20);
         btnExcluir.setBounds(860, 0, 100, 20);
     }
+
+    public void configurar () {
+        btnIncluir.addActionListener(e -> {
+            ClienteController clienteController = new ClienteController();
+            ClienteModel clienteModel = new ClienteModel();
+            clienteModel.setPesNome(tfNome.getText());
+            clienteModel.setPesCpfCnpj(tfCpfCnpj.getText());
+            clienteModel.setPesFantasia(tfNomeFantasia.getText());
+            clienteModel.setPesRgIe(tfRg.getText());
+            clienteModel.setPesFone1(tfCelular.getText());
+            clienteModel.setPesFone2(tfTel2.getText());
+            clienteModel.setPesEndereco(tfEndereco.getText());
+            clienteModel.setPesComplemento(tfComplemento.getText());
+            clienteModel.setPesCadastro(LocalDate.now());
+            clienteModel.setPesFone1(tfTel1.getText());
+            clienteModel.setPesFone2(tfTel2.getText());
+            clienteModel.setPesCelular(tfCelular.getText());
+            clienteModel.setPesEndereco(tfEndereco.getText());
+            clienteModel.setPesNumero(tfNumero.getText());
+            clienteModel.setPesComplemento(tfComplemento.getText());
+            clienteModel.setPesBairro("Recanto Azul");
+            clienteModel.setPesCidade("Bauru");
+            clienteModel.setPesUf("SP");
+            clienteModel.setPesCep("12345678");
+            clienteModel.setPesSite(tfSite.getText());
+            clienteModel.setPesEmail(tfEmail.getText());
+            clienteModel.setPesAtivo('y');
+            clienteModel.setCliLimiteCred(BigDecimal.valueOf(100));
+
+            try {
+                clienteController.cadastrarCliente(clienteModel);
+                JOptionPane.showMessageDialog(this.getParent(),"Usuario cadastrado");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Usuario cadastrado");
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnExcluir.addActionListener(e -> {
+            ClienteController clienteController = new ClienteController();
+            try {
+                clienteController.excluirCliente(Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"O puto foi excluido");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erron a exclusão");
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
 }
