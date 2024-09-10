@@ -1,4 +1,4 @@
-package modulovendas.main;
+package modulovendas.Main;
 
 import modulovendas.Login;
 
