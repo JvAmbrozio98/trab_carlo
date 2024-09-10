@@ -8,14 +8,20 @@ public class Fornecedor extends JPanel {
             lblNumero, lblComplemento, lblBairro, lblCidade, lblUf, lblCep, lblTel1, lblTel2, lblCelular, lblSite,
             lblEmail, lblAtivo, lblFornecedorCont;
 
-    private JTextField tfId, tfNome, tfNomeFantasia, tfCpfCnpj, tfRg, tfDataCadastro, tfEndereco, tfNumero, tfComplemento, tfCep,
-            tfTel1, tfTel2, tfCelular, tfSite, tfEmail, tfFornecedorCont;
+    private JTextField tfId, tfNome, tfNomeFantasia, tfCpfCnpj, tfRg, tfEndereco, tfNumero, tfComplemento, tfCep,
+            tfTel1, tfTel2, tfCelular, tfSite, tfEmail, tfFornecedorCont, tfBairro, tfCidade, tfUf;
 
-    private JCheckBox chbPessoaFisica, chbPessoaJuridica;
-
-    private JComboBox<String> cbBairro, cbCidade, cbUf, cbAtivo;
+    private JComboBox<String> cbAtivo, cbPesFJ;
 
     private JButton btnIncluir, btnAlterar, btnConsultar, btnExcluir;
+    
+    private JSpinner spinner;
+    
+    private SpinnerDateModel model;
+
+    String[] pesFJ = { "Física", "Jurídica" };
+    
+    String[] ativo = { "Ativo", "Não Ativo" };
 
     public Fornecedor() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
@@ -55,7 +61,6 @@ public class Fornecedor extends JPanel {
         tfNomeFantasia = new JTextField();
         tfCpfCnpj = new JTextField();
         tfRg = new JTextField();
-        tfDataCadastro = new JTextField();
         tfEndereco = new JTextField();
         tfNumero = new JTextField();
         tfComplemento = new JTextField();
@@ -66,22 +71,27 @@ public class Fornecedor extends JPanel {
         tfSite = new JTextField();
         tfEmail = new JTextField();
         tfFornecedorCont = new JTextField();
-
-        // CheckBoxes
-        chbPessoaFisica = new JCheckBox("Pessoa Física");
-        chbPessoaJuridica = new JCheckBox("Pessoa Jurídica");
+        tfBairro = new JTextField();
+        tfCidade = new JTextField();
+        tfUf = new JTextField();
 
         // ComboBoxes
-        cbBairro = new JComboBox<>();
-        cbCidade = new JComboBox<>();
-        cbUf = new JComboBox<>();
-        cbAtivo = new JComboBox<>();
+        cbPesFJ = new JComboBox<>(pesFJ);
+        cbAtivo = new JComboBox<>(ativo);
 
         // Buttons
         btnIncluir = new JButton("Incluir");
         btnAlterar = new JButton("Alterar");
         btnConsultar = new JButton("Consultar");
         btnExcluir = new JButton("Excluir");
+        
+        // Create a SpinnerDateModel with the current date
+        model = new SpinnerDateModel();
+        // Create a JSpinner with the date model
+        spinner = new JSpinner(model);
+        // Create a DateEditor for the spinner to format the date display
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
+        spinner.setEditor(editor);
 
     }
 
@@ -115,7 +125,6 @@ public class Fornecedor extends JPanel {
         add(tfNomeFantasia);
         add(tfCpfCnpj);
         add(tfRg);
-        add(tfDataCadastro);
         add(tfEndereco);
         add(tfNumero);
         add(tfComplemento);
@@ -126,16 +135,12 @@ public class Fornecedor extends JPanel {
         add(tfSite);
         add(tfEmail);
         add(tfFornecedorCont);
-
-        // Adiciona CheckBoxes
-        add(chbPessoaFisica);
-        add(chbPessoaJuridica);
-        
+        add(tfBairro);
+        add(tfCidade);
+        add(tfUf);
 
         // Adiciona ComboBoxes
-        add(cbBairro);
-        add(cbCidade);
-        add(cbUf);
+        add(cbPesFJ);
         add(cbAtivo);
 
         // Add Buttons
@@ -143,6 +148,9 @@ public class Fornecedor extends JPanel {
         add(btnAlterar);
         add(btnConsultar);
         add(btnExcluir);
+        
+        // Add Spinneer
+        add(spinner);
 
     }
 
@@ -179,12 +187,14 @@ public class Fornecedor extends JPanel {
         tfNomeFantasia.setBounds(150, 100, 300, 25);
         tfCpfCnpj.setBounds(25, 220, 300, 25);
         tfRg.setBounds(150, 260, 300, 25);
-        tfDataCadastro.setBounds(150, 300, 300, 25);
 
         tfEndereco.setBounds(600, 60, 300, 25);
         tfNumero.setBounds(600, 100, 300, 25);
         tfComplemento.setBounds(600, 140, 300, 25);
         tfCep.setBounds(600, 300, 300, 25);
+        tfBairro.setBounds(600, 180, 300, 25);
+        tfCidade.setBounds(600, 220, 300, 25);
+        tfUf.setBounds(600, 260, 100, 25);
 
         tfTel1.setBounds(150, 380, 300, 25);
         tfTel2.setBounds(150, 420, 300, 25);
@@ -193,20 +203,17 @@ public class Fornecedor extends JPanel {
         tfEmail.setBounds(600, 420, 300, 25);
         tfFornecedorCont.setBounds(630, 500, 270, 25);
 
-        // Posiciona CheckBoxes
-        chbPessoaFisica.setBounds(25, 180, 120, 25);
-        chbPessoaJuridica.setBounds(150, 180, 120, 25);
-
         // Posiciona ComboBoxes
-        cbBairro.setBounds(600, 180, 300, 25);
-        cbCidade.setBounds(600, 220, 300, 25);
-        cbUf.setBounds(600, 260, 100, 25);
-        cbAtivo.setBounds(600, 460, 80, 25);
+        cbPesFJ.setBounds(25, 180, 100, 25);
+        cbAtivo.setBounds(600, 460, 100, 25);
 
         // Posiciona Buttons
         btnIncluir.setBounds(560, 0, 100, 20);
         btnAlterar.setBounds(660, 0, 100, 20);
         btnConsultar.setBounds(760, 0, 100, 20);
         btnExcluir.setBounds(860, 0, 100, 20);
+        
+        // Posiciona Spinner
+        spinner.setBounds(150, 300, 300, 25);
     }
 }

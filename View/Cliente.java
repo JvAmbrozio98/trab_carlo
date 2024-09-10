@@ -8,13 +8,21 @@ public class Cliente extends JPanel {
             lblNumero, lblComplemento, lblBairro, lblCidade, lblUf, lblCep, lblTel1, lblTel2, lblCelular, lblSite,
             lblEmail, lblAtivo, lblLimiteCredito;
     
-    private JTextField tfId, tfNome, tfNomeFantasia, tfCpfCnpj, tfRg, tfDataCadastro, tfEndereco, tfNumero, tfComplemento, tfCep,
-            tfTel1, tfTel2, tfCelular, tfSite, tfEmail, tfLimiteCredito;
+    private JTextField tfId, tfNome, tfNomeFantasia, tfCpfCnpj, tfRg, tfEndereco, tfNumero, tfComplemento, tfCep,
+            tfTel1, tfTel2, tfCelular, tfSite, tfEmail, tfLimiteCredito, tfBairro, tfCidade, tfUf;
     
-    private JComboBox<String> cbBairro, cbCidade, cbUf, cbPesFiJu, cbAtivo;
+    private JComboBox<String> cbPesFiJu, cbAtivo;
     
     private JButton btnIncluir, btnAlterar, btnConsultar, btnExcluir;
+    
+    private JSpinner spinner;
+    
+    private SpinnerDateModel model;
 
+    String[] pesFJ = { "Física", "Jurídica" };
+    
+    String[] ativo = { "Ativo", "Não Ativo" };
+    
     public Cliente() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
 
@@ -53,7 +61,6 @@ public class Cliente extends JPanel {
         tfNomeFantasia = new JTextField();
         tfCpfCnpj = new JTextField();
         tfRg = new JTextField();
-        tfDataCadastro = new JTextField();
         tfEndereco = new JTextField();
         tfNumero = new JTextField();
         tfComplemento = new JTextField();
@@ -64,19 +71,26 @@ public class Cliente extends JPanel {
         tfSite = new JTextField();
         tfEmail = new JTextField();
         tfLimiteCredito = new JTextField();
+        tfBairro = new JTextField();
+        tfCidade = new JTextField();
+        tfUf = new JTextField();
         
         // ComboBoxes
-        cbBairro = new JComboBox<>();
-        cbCidade = new JComboBox<>();
-        cbUf = new JComboBox<>();
-        cbPesFiJu = new JComboBox<>();
-        cbAtivo = new JComboBox<>();
+        cbPesFiJu = new JComboBox(pesFJ);
+        cbAtivo = new JComboBox(ativo);
 
         btnIncluir = new JButton("Incluir");
         btnAlterar = new JButton("Alterar");
         btnConsultar = new JButton("Consultar");
         btnExcluir = new JButton("Excluir");
 
+        // Create a SpinnerDateModel with the current date
+        model = new SpinnerDateModel();
+        // Create a JSpinner with the date model
+        spinner = new JSpinner(model);
+        // Create a DateEditor for the spinner to format the date display
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
+        spinner.setEditor(editor);
     }
 
     public void adicionar() {
@@ -109,7 +123,6 @@ public class Cliente extends JPanel {
         add(tfNomeFantasia);
         add(tfCpfCnpj);
         add(tfRg);
-        add(tfDataCadastro);
         add(tfEndereco);
         add(tfNumero);
         add(tfComplemento);
@@ -120,19 +133,21 @@ public class Cliente extends JPanel {
         add(tfSite);
         add(tfEmail);
         add(tfLimiteCredito);
+        add(tfBairro);
+        add(tfCidade);
+        add(tfUf);
 
         // Adiciona ComboBoxes
-        add(cbBairro);
-        add(cbCidade);
-        add(cbUf);
         add(cbPesFiJu);
         add(cbAtivo);
-        
 
         add(btnIncluir);
         add(btnAlterar);
         add(btnConsultar);
         add(btnExcluir);
+        
+        // Add Spinneer
+        add(spinner);
 
     }
 
@@ -169,13 +184,15 @@ public class Cliente extends JPanel {
         tfNomeFantasia.setBounds(150, 100, 300, 25);
         tfCpfCnpj.setBounds(25, 220, 300, 25);
         tfRg.setBounds(150, 260, 300, 25);
-        tfDataCadastro.setBounds(150, 300, 300, 25);
         
         tfEndereco.setBounds(600, 60, 300, 25);
         tfNumero.setBounds(600, 100, 300, 25);
         tfComplemento.setBounds(600, 140, 300, 25);
         tfCep.setBounds(600, 300, 300, 25);
-        
+        tfBairro.setBounds(600, 180, 300, 25);
+        tfCidade.setBounds(600, 220, 300, 25);
+        tfUf.setBounds(600, 260, 100, 25);
+
         tfTel1.setBounds(150, 380, 300, 25);
         tfTel2.setBounds(150, 420, 300, 25);
         tfCelular.setBounds(150, 460, 300, 25);
@@ -184,9 +201,7 @@ public class Cliente extends JPanel {
         tfLimiteCredito.setBounds(600, 500, 300, 25);
         
         // Posiciona ComboBoxes
-        cbBairro.setBounds(600, 180, 300, 25);
-        cbCidade.setBounds(600, 220, 300, 25);
-        cbUf.setBounds(600, 260, 100, 25);
+
         cbPesFiJu.setBounds(25, 180, 100, 25);
         cbAtivo.setBounds(600, 460, 100, 25);
         
@@ -195,5 +210,8 @@ public class Cliente extends JPanel {
         btnAlterar.setBounds(660, 0, 100, 20);
         btnConsultar.setBounds(760, 0, 100, 20);
         btnExcluir.setBounds(860, 0, 100, 20);
+        
+        // Posiciona Spinner
+        spinner.setBounds(150, 300, 300, 25);
     }
 }

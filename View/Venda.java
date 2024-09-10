@@ -2,11 +2,12 @@ package modulovendas;
 
 import javax.swing.*;
 
-public class Compra extends JPanel {
+public class Venda extends JPanel {
 
-    private JLabel lblId, lblUsu, lblCli, lblDataEm, lblValor, lblDesconto, lblTotal, lblDataEnt, lblObs, lblProdutos;
+    private JLabel lblId, lblUsu, lblCli, lblData, lblValor, lblDesconto, lblTotal, lblObs,
+            lblProdutos, lblFormPagto;
 
-    private JTextField tfId, tfData, tfValor, tfDesconto, tfTotal, tfDataEnt;
+    private JTextField tfId, tfValor, tfDesconto, tfTotal;
 
     private JComboBox cbIdUsu, cbIdCli;
 
@@ -14,12 +15,16 @@ public class Compra extends JPanel {
 
     private JScrollPane spObs;
 
-    private JTable tProdutos;
+    private JTable tProdutos, tFormpagto;
     
-    private JButton btnIncluirP, btnAlterarP, btnExcluirP,
+    private JButton btnIncluirP, btnAlterarP, btnExcluirP, btnIncluirF, btnAlterarF, btnExcluirF,
             btnIncluir, btnAlterar, btnConsultar, btnExcluir;
+    
+    private JSpinner spinner;
+    
+    private SpinnerDateModel model;
 
-    public Compra() {
+    public Venda() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
 
         instanciar(); // Instancia componentes
@@ -33,21 +38,19 @@ public class Compra extends JPanel {
         lblId = new JLabel("ID Venda");
         lblUsu = new JLabel("Usuário");
         lblCli = new JLabel("Cliente");
-        lblDataEm = new JLabel("Data Emissão");
+        lblData = new JLabel("Data");
         lblValor = new JLabel("Valor");
         lblDesconto = new JLabel("Desconto");
         lblTotal = new JLabel("Total");
-        lblDataEnt = new JLabel("Data Entrada");
         lblObs = new JLabel("Observações"); //Tipo Text no Banco
         lblProdutos = new JLabel("Produtos");
+        lblFormPagto = new JLabel("Formas de Pagamento");
 
         // TextFields
         tfId = new JTextField();
-        tfData = new JTextField();
         tfValor = new JTextField();
         tfDesconto = new JTextField();
         tfTotal = new JTextField();
-        tfDataEnt = new JTextField();
 
         // ComboBox
         cbIdUsu = new JComboBox();
@@ -57,17 +60,28 @@ public class Compra extends JPanel {
         taObs = new JTextArea();
         spObs = new JScrollPane(taObs);
         tProdutos = new JTable();
+        tFormpagto = new JTable();
         
         // Buttons
         btnIncluirP = new JButton("Incluir");
         btnAlterarP = new JButton("Alterar");
         btnExcluirP = new JButton("Excluir");
+        btnIncluirF = new JButton("Incluir");
+        btnAlterarF = new JButton("Alterar");
+        btnExcluirF = new JButton("Excluir");
         
         btnIncluir = new JButton("Incluir");
         btnAlterar = new JButton("Alterar");
         btnConsultar = new JButton("Consultar");
         btnExcluir = new JButton("Excluir");
-        
+
+        // Create a SpinnerDateModel with the current date
+        model = new SpinnerDateModel();
+        // Create a JSpinner with the date model
+        spinner = new JSpinner(model);
+        // Create a DateEditor for the spinner to format the date display
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
+        spinner.setEditor(editor);
 
     }
 
@@ -77,39 +91,42 @@ public class Compra extends JPanel {
         add(lblId);
         add(lblUsu);
         add(lblCli);
-        add(lblDataEm);
+        add(lblData);
         add(lblValor);
         add(lblDesconto);
         add(lblTotal);
-        add(lblDataEnt);
         add(lblObs);
         add(lblProdutos);
+        add(lblFormPagto);
 
         // Adiciona TextFields
         add(tfId);
         add(cbIdUsu);
         add(cbIdCli);
-        add(tfData);
         add(tfValor);
         add(tfDesconto);
         add(tfTotal);
-        add(tfDataEnt);
 
         // Adiciona ScrollPane e Table
         add(spObs);
         add(tProdutos);
+        add(tFormpagto);
 
         // Buttons
         add(btnIncluirP);
         add(btnAlterarP);
         add(btnExcluirP);
+        add(btnIncluirF);
+        add(btnAlterarF);
+        add(btnExcluirF);
         
         add(btnIncluir);
         add(btnAlterar);
         add(btnConsultar);
         add(btnExcluir);
-        
 
+        // Add Spinneer
+        add(spinner);
     }
 
     public void posicionar() {
@@ -118,39 +135,43 @@ public class Compra extends JPanel {
         lblId.setBounds(25, 20, 90, 25);
         lblUsu.setBounds(25, 60, 90, 25);
         lblCli.setBounds(25, 100, 100, 25);
-        lblDataEm.setBounds(25, 140, 90, 25);
+        lblData.setBounds(25, 140, 90, 25);
         lblValor.setBounds(25, 500, 90, 25);
         lblDesconto.setBounds(320, 500, 120, 25);
         lblTotal.setBounds(670, 500, 120, 25);
-        lblDataEnt.setBounds(25, 180, 120, 25);
-        lblObs.setBounds(540, 30, 90, 25);
-        lblProdutos.setBounds(180, 220, 120, 25);
+        lblObs.setBounds(540, 30, 100, 25);
+        lblProdutos.setBounds(180, 190, 120, 25);
+        lblFormPagto.setBounds(660, 190, 150, 25);
 
         // Posiciona TextFields
         tfId.setBounds(150, 20, 300, 25);
-        tfData.setBounds(150, 140, 300, 25);
         tfValor.setBounds(70, 500, 200, 25);
         tfDesconto.setBounds(400, 500, 200, 25);
         tfTotal.setBounds(720, 500, 200, 25);
-        tfDataEnt.setBounds(150, 180, 300, 25);
 
         // Posiciona ComboBox
         cbIdUsu.setBounds(150, 60, 300, 25);
         cbIdCli.setBounds(150, 100, 300, 25);
 
         // Posiciona ScrollPane e Table
-        spObs.setBounds(540, 60, 400, 150);
-        tProdutos.setBounds(25, 280, 910, 200);
+        spObs.setBounds(540, 60, 400, 110);
+        tProdutos.setBounds(25, 250, 440, 200);
+        tFormpagto.setBounds(500, 250, 440, 200);
 
         // Posiciona Buttons
-        btnIncluirP.setBounds(40, 250, 100, 20);
-        btnAlterarP.setBounds(160, 250, 100, 20);
-        btnExcluirP.setBounds(280, 250, 100, 20);
+        btnIncluirP.setBounds(40, 220, 100, 20);
+        btnAlterarP.setBounds(160, 220, 100, 20);
+        btnExcluirP.setBounds(280, 220, 100, 20);
+        btnIncluirF.setBounds(540, 220, 100, 20);
+        btnAlterarF.setBounds(680, 220, 100, 20);
+        btnExcluirF.setBounds(820, 220, 100, 20);
         
         btnIncluir.setBounds(560, 0, 100, 20);
         btnAlterar.setBounds(660, 0, 100, 20);
         btnConsultar.setBounds(760, 0, 100, 20);
         btnExcluir.setBounds(860, 0, 100, 20);
 
+        // Posiciona Spinner
+        spinner.setBounds(150, 140, 300, 25);
     }
 }

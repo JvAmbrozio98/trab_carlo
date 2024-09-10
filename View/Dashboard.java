@@ -17,7 +17,6 @@ public class Dashboard extends JFrame {
     private JMenuBar barraMenu;
     private JMenu menuCadastro, menuMovimento, menuSair;
     private JMenuItem menuCliente, menuFornecedor, menuProduto, menuFormPagto, menuUsuario, menuVenda, menuCompra;
-    //private JButton btnIncluir, btnAlterar, btnExcluir;
     
     private JPanel mainPanel;
     private CardLayout cardLayout;
@@ -52,11 +51,6 @@ public class Dashboard extends JFrame {
         menuCompra = new JMenuItem("Compra");
         
         menuSair = new JMenu("Sair");
-        
-//        btnCriar = new JButton("Criar");
-//        btnIncluir = new JButton("Incluir");
-//        btnAlterar = new JButton("Alterar");
-//        btnExcluir = new JButton("Excluir");
         
         mainPanel = new JPanel();
         cardLayout = new CardLayout();
@@ -122,12 +116,7 @@ public class Dashboard extends JFrame {
         barraMenu.add(Box.createHorizontalGlue());
         barraMenu.add(Box.createHorizontalGlue());
         barraMenu.add(Box.createHorizontalGlue());
-        
-//        barraMenu.add(btnCriar);
-//        barraMenu.add(btnIncluir);
-//        barraMenu.add(btnAlterar);
-//        barraMenu.add(btnExcluir);
-                                              
+                 
         setJMenuBar(barraMenu);
         add(mainPanel);
 

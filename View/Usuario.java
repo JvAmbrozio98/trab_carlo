@@ -4,13 +4,19 @@ import javax.swing.*;
 
 public class Usuario extends JPanel {
 
-    private JLabel lblId, lblNome, lbllogin, lblSenha, lblDataCadastro;
+    private JLabel lblId, lblNome, lbllogin, lblSenha, lblDataCadastro, lblAtivo;
     
-    private JTextField tfId, tfNome, tflogin, tfSenha, tfDataCadastro;
+    private JTextField tfId, tfNome, tflogin, tfSenha;
     
-    private JCheckBox chbAtivo;
+    private JComboBox cbAtivo;
     
     private JButton btnIncluir, btnAlterar, btnConsultar, btnExcluir;
+    
+    private JSpinner spinner;
+    
+    private SpinnerDateModel model;
+    
+    String[] ativo = { "Ativo", "Não Ativo" };
     
     public Usuario() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
@@ -28,17 +34,17 @@ public class Usuario extends JPanel {
         lbllogin = new JLabel("Login");
         lblSenha = new JLabel("Senha");
         lblDataCadastro = new JLabel("Data Cadastro");
+        lblAtivo = new JLabel("Ativo");
         
         // TextFields
         tfId = new JTextField();
         tfNome = new JTextField();
         tflogin = new JTextField();
         tfSenha = new JTextField();
-        tfDataCadastro = new JTextField();
         
-        // CheckBoxes
+        // ComboBoxes
 
-        chbAtivo = new JCheckBox("Ativo");
+        cbAtivo = new JComboBox(ativo);
         
         // Buttons
         btnIncluir = new JButton("Incluir");
@@ -46,7 +52,13 @@ public class Usuario extends JPanel {
         btnConsultar = new JButton("Consultar");
         btnExcluir = new JButton("Excluir");
 
-
+        // Create a SpinnerDateModel with the current date
+        model = new SpinnerDateModel();
+        // Create a JSpinner with the date model
+        spinner = new JSpinner(model);
+        // Create a DateEditor for the spinner to format the date display
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
+        spinner.setEditor(editor);
     }
 
     public void adicionar() {
@@ -57,17 +69,17 @@ public class Usuario extends JPanel {
         add(lbllogin);
         add(lblSenha);
         add(lblDataCadastro);
+        add(lblAtivo);
         
         // Adiciona TextFields
         add(tfId);
         add(tfNome);
         add(tflogin);
         add(tfSenha);
-        add(tfDataCadastro);
         
-        // Adiciona CheckBoxes
+        // Adiciona ComboBoxes
 
-        add(chbAtivo);
+        add(cbAtivo);
         
         // Add Buttons
         add(btnIncluir);
@@ -75,6 +87,8 @@ public class Usuario extends JPanel {
         add(btnConsultar);
         add(btnExcluir);
 
+        // Add Spinneer
+        add(spinner);
     }
 
     public void posicionar() {
@@ -85,17 +99,17 @@ public class Usuario extends JPanel {
         lbllogin.setBounds(200, 240, 150, 25);
         lblSenha.setBounds(200, 280, 150, 25);
         lblDataCadastro.setBounds(200, 320, 150, 25);
+        lblAtivo.setBounds(200, 360, 120, 25);
      
         // Posiciona TextFields
         tfId.setBounds(400, 160, 300, 25);
         tfNome.setBounds(400, 200, 300, 25);
         tflogin.setBounds(400, 240, 300, 25);
         tfSenha.setBounds(400, 280, 300, 25);
-        tfDataCadastro.setBounds(400, 320, 300, 25);
         
-        // Posiciona CheckBoxes
+        // Posiciona ComboBoxes
 
-        chbAtivo.setBounds(200, 360, 120, 25);
+        cbAtivo.setBounds(200, 390, 120, 25);
         
         // Posiciona Buttons
         btnIncluir.setBounds(560, 0, 100, 20);
@@ -103,5 +117,7 @@ public class Usuario extends JPanel {
         btnConsultar.setBounds(760, 0, 100, 20);
         btnExcluir.setBounds(860, 0, 100, 20);
         
+        // Posiciona Spinner
+        spinner.setBounds(400, 320, 300, 25);
     }
 }
