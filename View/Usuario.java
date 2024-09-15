@@ -1,3 +1,4 @@
+
 package modulovendas;
 
 import java.awt.BorderLayout;
@@ -9,21 +10,21 @@ import javax.swing.*;
 public class Usuario extends JPanel {
 
     private JLabel lblId, lblNome, lbllogin, lblSenha, lblDataCadastro, lblAtivo;
-    
+
     private JTextField tfId, tfNome, tflogin;
     
     private JPasswordField pfSenha;
-    
+
     private JComboBox cbAtivo;
-    
+
     private JButton btnIncluir, btnAlterar, btnConsultar, btnExcluir;
-    
+
     private JSpinner spinner;
-    
+
     private SpinnerDateModel model;
-    
+
     String[] ativo = {"Ativo", "Não Ativo"};
-    
+
     public Usuario() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
 
@@ -41,7 +42,7 @@ public class Usuario extends JPanel {
         lblSenha = new JLabel("Senha");
         lblDataCadastro = new JLabel("Data Cadastro");
         lblAtivo = new JLabel("Ativo");
-        
+
         // TextFields
         tfId = new JTextField();
         tfNome = new JTextField();
@@ -51,7 +52,7 @@ public class Usuario extends JPanel {
         
         // ComboBoxes
         cbAtivo = new JComboBox(ativo);
-        
+
         // Buttons
         btnIncluir = new JButton("Incluir");
         btnAlterar = new JButton("Alterar");
@@ -126,17 +127,17 @@ public class Usuario extends JPanel {
         add(lblSenha);
         add(lblDataCadastro);
         add(lblAtivo);
-        
+
         // Adiciona TextFields
         add(tfId);
         add(tfNome);
         add(tflogin);
         
         add(pfSenha);
-        
+
         // Adiciona ComboBoxes
         add(cbAtivo);
-        
+
         // Add Buttons
         add(btnIncluir);
         add(btnAlterar);
@@ -156,23 +157,23 @@ public class Usuario extends JPanel {
         lblSenha.setBounds(200, 280, 150, 25);
         lblDataCadastro.setBounds(200, 320, 150, 25);
         lblAtivo.setBounds(200, 360, 120, 25);
-     
+
         // Posiciona TextFields
         tfId.setBounds(400, 160, 300, 25);
         tfNome.setBounds(400, 200, 300, 25);
         tflogin.setBounds(400, 240, 300, 25);
         
         pfSenha.setBounds(400, 280, 300, 25);
-        
+
         // Posiciona ComboBoxes
         cbAtivo.setBounds(200, 390, 120, 25);
-        
+
         // Posiciona Buttons
         btnIncluir.setBounds(560, 0, 100, 20);
         btnAlterar.setBounds(660, 0, 100, 20);
         btnConsultar.setBounds(760, 0, 100, 20);
         btnExcluir.setBounds(860, 0, 100, 20);
-        
+
         // Posiciona Spinner
         spinner.setBounds(400, 320, 300, 25);
     }

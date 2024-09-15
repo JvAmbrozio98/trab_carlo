@@ -23,7 +23,7 @@ public class Venda extends JPanel {
     private JSpinner spinner;
     
     private SpinnerDateModel model;
-
+    
     String[] columnNames = {"Código",
         "Quantidade",
         "Preço",

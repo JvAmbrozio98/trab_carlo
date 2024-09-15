@@ -11,7 +11,7 @@ public class FormPagto extends JPanel {
     private JComboBox cbAtivo;
 
     private JButton btnIncluir, btnAlterar, btnConsultar, btnExcluir;
-    
+
     String[] ativo = {"Ativo", "Não Ativo"};
 
     public FormPagto() {

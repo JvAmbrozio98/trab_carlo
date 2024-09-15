@@ -26,13 +26,13 @@ public class Cliente extends JPanel {
     
     private SpinnerDateModel model;
 
-<<<<<<< HEAD:View/Cliente.java
     String[] pesFJ = { "Física", "Jurídica" };
     
     String[] ativo = { "Ativo", "Não Ativo" };
     
     public Cliente() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
+
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
@@ -98,6 +98,8 @@ public class Cliente extends JPanel {
         // Create a DateEditor for the spinner to format the date display
         JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
         spinner.setEditor(editor);
+        
+        
     }
 
     public void adicionar() {
@@ -270,6 +272,53 @@ public class Cliente extends JPanel {
                 throw new RuntimeException(ex);
             }
         });
-    }
 
+    btnConsultar.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Cria e exibe uma nova janela
+            JFrame newFrame = new JFrame("Consultar Cliente");
+            newFrame.setSize(1200, 500);
+            newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            newFrame.setVisible(true);
+            newFrame.setLocationRelativeTo(null);
+
+            // Cria um painel para adicionar componentes à nova janela
+            JPanel newPanel = new JPanel(new BorderLayout());
+            newFrame.add(newPanel);
+
+            // Adiciona vários componentes ao painel da nova janela
+            JPanel topPanel = new JPanel();
+            // Adiciona vários componentes ao painel da nova janela
+            topPanel.add(new JLabel("ID:"));
+            JTextField tfId = new JTextField(5);
+            topPanel.add(tfId);
+
+            topPanel.add(new JLabel("Nome:"));
+            JTextField tfNome = new JTextField(25);
+            topPanel.add(tfNome);
+
+            JButton btnConsultar = new JButton("Consultar");
+            topPanel.add(btnConsultar);
+
+            JButton btnLimpar = new JButton("Limpar");
+            topPanel.add(btnLimpar);
+            
+            newPanel.add(topPanel, BorderLayout.NORTH);
+
+            String[][] data = {
+                    {"", "",  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",}};
+            
+            String[] columnNames = {"Código", "Nome", "Nome Fantasia", "Pessoa", "CPF/CNPJ", "RG", "Data Cadastro",
+                     "Endereço", "Número", "Complemento", "Bairro", "Cidade", "UF", "CEP",
+                     "Telefone 1", "Telefone 2", "Telefone Celular", "Site", "Email", "Ativo", "Limite Crédito"};
+            
+            JTable tUsuario = new JTable(data, columnNames);
+            
+            JScrollPane scrollPane = new JScrollPane(tUsuario);
+            newPanel.add(scrollPane, BorderLayout.CENTER);
+            
+        }
+    });
+    }
 }

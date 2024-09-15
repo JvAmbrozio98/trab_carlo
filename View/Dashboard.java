@@ -50,7 +50,7 @@ public class Dashboard extends JFrame {
         menuCompra = new JMenuItem("Compra");
         
         menuSair = new JMenu("Sair");
-        
+
         mainPanel = new JPanel();
         cardLayout = new CardLayout();
         mainPanel.setLayout(cardLayout);
@@ -115,7 +115,7 @@ public class Dashboard extends JFrame {
         barraMenu.add(Box.createHorizontalGlue());
         barraMenu.add(Box.createHorizontalGlue());
         barraMenu.add(Box.createHorizontalGlue());
-                 
+                                   
         setJMenuBar(barraMenu);
         add(mainPanel);
 
