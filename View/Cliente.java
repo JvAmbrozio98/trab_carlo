@@ -31,16 +31,11 @@ public class Cliente extends JPanel {
     
     String[] ativo = { "Ativo", "Não Ativo" };
     
-=======
-
-
->>>>>>> 657e4cef651c17f896195638e4bf87548a6271b7:Cliente.java
     public Cliente() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
-        configurar();
     }
 
     public void instanciar() {

@@ -13,7 +13,7 @@ public class Venda extends JPanel {
 
     private JTextArea taObs;
 
-    private JScrollPane spObs;
+    private JScrollPane spObs, spVenda, spPagto;
 
     private JTable tProdutos, tFormpagto;
     
@@ -23,6 +23,25 @@ public class Venda extends JPanel {
     private JSpinner spinner;
     
     private SpinnerDateModel model;
+
+    String[] columnNames = {"Código",
+        "Quantidade",
+        "Preço",
+        "Desconto",
+        "Total",
+        "Produto"};
+
+    Object[][] data = {
+        {"", "", "", "", "", ""},
+    };
+    
+    String[] columnNames2 = {"Código",
+        "Valor",
+        "Forma Pagamento"};
+
+    Object[][] data2 = {
+        {"", "", ""},
+    };
 
     public Venda() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
@@ -59,8 +78,10 @@ public class Venda extends JPanel {
         // TextArea, ScrollPane e Table
         taObs = new JTextArea();
         spObs = new JScrollPane(taObs);
-        tProdutos = new JTable();
-        tFormpagto = new JTable();
+        tProdutos = new JTable(data, columnNames);
+        spVenda = new JScrollPane(tProdutos);
+        tFormpagto = new JTable(data2, columnNames2);
+        spPagto = new JScrollPane(tFormpagto);
         
         // Buttons
         btnIncluirP = new JButton("Incluir");
@@ -109,8 +130,8 @@ public class Venda extends JPanel {
 
         // Adiciona ScrollPane e Table
         add(spObs);
-        add(tProdutos);
-        add(tFormpagto);
+        add(spVenda);
+        add(spPagto);
 
         // Buttons
         add(btnIncluirP);
@@ -155,8 +176,8 @@ public class Venda extends JPanel {
 
         // Posiciona ScrollPane e Table
         spObs.setBounds(540, 60, 400, 110);
-        tProdutos.setBounds(25, 250, 440, 200);
-        tFormpagto.setBounds(500, 250, 440, 200);
+        spVenda.setBounds(25, 250, 440, 200);
+        spPagto.setBounds(500, 250, 440, 200);
 
         // Posiciona Buttons
         btnIncluirP.setBounds(40, 220, 100, 20);

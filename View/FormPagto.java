@@ -12,7 +12,7 @@ public class FormPagto extends JPanel {
 
     private JButton btnIncluir, btnAlterar, btnConsultar, btnExcluir;
     
-    String[] ativo = { "Ativo", "Não Ativo" };
+    String[] ativo = {"Ativo", "Não Ativo"};
 
     public FormPagto() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
@@ -41,6 +41,54 @@ public class FormPagto extends JPanel {
         btnAlterar = new JButton("Alterar");
         btnConsultar = new JButton("Consultar");
         btnExcluir = new JButton("Excluir");
+
+        btnConsultar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cria e exibe uma nova janela
+                JFrame newFrame = new JFrame("Consultar Forma de Pagamento");
+                newFrame.setSize(650, 550);
+                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                newFrame.setVisible(true);
+                newFrame.setResizable(false); // Permite redimensionar a janela
+                newFrame.setLocationRelativeTo(null);
+
+                // Cria um painel com BorderLayout para adicionar componentes
+                JPanel newPanel = new JPanel(new BorderLayout()); // Usa BorderLayout para expandir a tabela
+                newFrame.add(newPanel);
+
+                // Adiciona os campos de entrada e botões na parte superior (NORTE)
+                JPanel topPanel = new JPanel();
+                topPanel.add(new JLabel("ID:"));
+                JTextField tfId = new JTextField(5);
+                topPanel.add(tfId);
+
+                topPanel.add(new JLabel("Forma de Pagamento:"));
+                JTextField tfNome = new JTextField(20);
+                topPanel.add(tfNome);
+
+                JButton btnConsultar = new JButton("Consultar");
+                topPanel.add(btnConsultar);
+
+                JButton btnLimpar = new JButton("Limpar");
+                topPanel.add(btnLimpar);
+
+                newPanel.add(topPanel, BorderLayout.NORTH); // Adiciona o painel superior ao NORTE
+
+                // Cria os dados da tabela
+                String[][] data = {
+                    {"", "", ""}
+                };
+                String[] columnNames = {"Código", "Forma de Pagamento", "Ativo"};
+
+                // Cria a tabela e adiciona um JScrollPane
+                JTable tFormPagto = new JTable(data, columnNames);
+                JScrollPane scrollPane = new JScrollPane(tFormPagto);
+
+                // Adiciona o JScrollPane ao painel principal no CENTRO
+                newPanel.add(scrollPane, BorderLayout.CENTER);
+            }
+        });
 
     }
 

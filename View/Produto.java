@@ -77,6 +77,53 @@ public class Produto extends JPanel {
         JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
         spinner.setEditor(editor);
 
+        btnConsultar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cria e exibe uma nova janela
+                JFrame newFrame = new JFrame("Consultar Produto");
+                newFrame.setSize(1300, 550);
+                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                newFrame.setVisible(true);
+                newFrame.setResizable(false);
+                newFrame.setLocationRelativeTo(null);
+
+                // Cria um painel para adicionar componentes à nova janela
+                JPanel newPanel = new JPanel(new BorderLayout());
+                newFrame.add(newPanel);
+
+                // Adiciona vários componentes ao painel da nova janela
+                JPanel topPanel = new JPanel();
+                topPanel.add(new JLabel("ID:"));
+                JTextField tfId = new JTextField(5);
+                topPanel.add(tfId);
+
+                topPanel.add(new JLabel("Nome:"));
+                JTextField tfNome = new JTextField(25);
+                topPanel.add(tfNome);
+
+                JButton btnConsultar = new JButton("Consultar");
+                topPanel.add(btnConsultar);
+
+                JButton btnLimpar = new JButton("Limpar");
+                topPanel.add(btnLimpar);
+
+                newPanel.add(topPanel, BorderLayout.NORTH); 
+                
+                String[][] data = {
+                        {"", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}};
+                
+                String[] columnNames = {"Código", "Nome", "Estoque", "Unidade", "Preço", "Custo", "Atacado",
+                "Mínimo", "Máximo", "Embalagem", "Peso", "Data Cadastro", "Observações", "Ativo", "Tipo"};
+                
+                JTable tFornecedor = new JTable(data, columnNames);
+                
+                JScrollPane scrollPane = new JScrollPane(tFornecedor);
+                newPanel.add(scrollPane, BorderLayout.CENTER);
+                
+            }
+        });
+        
     }
 
     public void adicionar() {

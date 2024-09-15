@@ -12,7 +12,7 @@ public class Compra extends JPanel {
 
     private JTextArea taObs;
 
-    private JScrollPane spObs;
+    private JScrollPane spObs, scrollPane;
 
     private JTable tProdutos;
 
@@ -22,6 +22,17 @@ public class Compra extends JPanel {
     private JSpinner spinnerEm, spinnerEnt;
 
     private SpinnerDateModel modelEm, modelEnt;
+    
+    String[] columnNames = {"Código",
+        "Quantidade",
+        "Preço",
+        "Desconto",
+        "Total",
+        "Produto"};
+
+    Object[][] data = {
+        {"", "", "", "", "", ""},
+    };
 
     public Compra() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
@@ -58,7 +69,8 @@ public class Compra extends JPanel {
         // TextArea, ScrollPane e Table
         taObs = new JTextArea();
         spObs = new JScrollPane(taObs);
-        tProdutos = new JTable();
+        tProdutos = new JTable(data, columnNames);
+        scrollPane = new JScrollPane(tProdutos);
 
         // Buttons
         btnIncluirP = new JButton("Incluir");
@@ -112,7 +124,8 @@ public class Compra extends JPanel {
 
         // Adiciona ScrollPane e Table
         add(spObs);
-        add(tProdutos);
+        //add(tProdutos);
+        add(scrollPane);
 
         // Buttons
         add(btnIncluirP);
@@ -155,7 +168,7 @@ public class Compra extends JPanel {
 
         // Posiciona ScrollPane e Table
         spObs.setBounds(540, 60, 400, 150);
-        tProdutos.setBounds(25, 280, 910, 200);
+        scrollPane.setBounds(25, 280, 910, 200);
 
         // Posiciona Buttons
         btnIncluirP.setBounds(40, 250, 100, 20);

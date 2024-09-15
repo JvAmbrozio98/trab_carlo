@@ -1,5 +1,8 @@
 package modulovendas;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class Fornecedor extends JPanel {
@@ -93,6 +96,53 @@ public class Fornecedor extends JPanel {
         JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
         spinner.setEditor(editor);
 
+        btnConsultar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cria e exibe uma nova janela
+                JFrame newFrame = new JFrame("Consultar Fornecedor");
+                newFrame.setSize(1200, 550);
+                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                newFrame.setVisible(true);
+                newFrame.setLocationRelativeTo(null);
+
+                // Cria um painel para adicionar componentes à nova janela
+                JPanel newPanel = new JPanel(new BorderLayout());
+                newFrame.add(newPanel);
+
+                // Adiciona vários componentes ao painel da nova janela
+                JPanel topPanel = new JPanel();
+                topPanel.add(new JLabel("ID:"));
+                JTextField tfId = new JTextField(5);
+                topPanel.add(tfId);
+
+                topPanel.add(new JLabel("Nome:"));
+                JTextField tfNome = new JTextField(25);
+                topPanel.add(tfNome);
+
+                JButton btnConsultar = new JButton("Consultar");
+                topPanel.add(btnConsultar);
+
+                JButton btnLimpar = new JButton("Limpar");
+                topPanel.add(btnLimpar);
+
+                newPanel.add(topPanel, BorderLayout.NORTH); 
+                
+                String[][] data = {
+                        {"", "",  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",}};
+                
+                String[] columnNames = {"Código", "Nome", "Nome Fantasia", "Pessoa", "CPF/CNPJ", "RG", "Data Cadastro",
+                         "Endereço", "Número", "Complemento", "Bairro", "Cidade", "UF", "CEP",
+                         "Telefone 1", "Telefone 2", "Telefone Celular", "Site", "Email", "Ativo", "Contato Fornecedor"};
+                
+                JTable tFornecedor = new JTable(data, columnNames);
+                
+                JScrollPane scrollPane = new JScrollPane(tFornecedor);
+                newPanel.add(scrollPane, BorderLayout.CENTER);
+                
+            }
+        });
+        
     }
 
     public void adicionar() {
