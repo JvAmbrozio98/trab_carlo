@@ -4,10 +4,13 @@ import modulovendas.Controllers.ClienteController;
 import modulovendas.Models.ClienteModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Cliente extends JPanel {
 
@@ -26,16 +29,19 @@ public class Cliente extends JPanel {
     
     private SpinnerDateModel model;
 
+
     String[] pesFJ = { "Física", "Jurídica" };
     
     String[] ativo = { "Ativo", "Não Ativo" };
-    
+
+
+
     public Cliente() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
-
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
+        configurar(); // adciona funcionalidades
     }
 
     public void instanciar() {
@@ -98,8 +104,8 @@ public class Cliente extends JPanel {
         // Create a DateEditor for the spinner to format the date display
         JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
         spinner.setEditor(editor);
-        
-        
+
+
     }
 
     public void adicionar() {
@@ -236,27 +242,27 @@ public class Cliente extends JPanel {
             clienteModel.setPesFone2(tfTel2.getText());
             clienteModel.setPesEndereco(tfEndereco.getText());
             clienteModel.setPesComplemento(tfComplemento.getText());
-            clienteModel.setPesCadastro(LocalDate.now());
+            clienteModel.setPesCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
             clienteModel.setPesFone1(tfTel1.getText());
             clienteModel.setPesFone2(tfTel2.getText());
             clienteModel.setPesCelular(tfCelular.getText());
             clienteModel.setPesEndereco(tfEndereco.getText());
             clienteModel.setPesNumero(tfNumero.getText());
             clienteModel.setPesComplemento(tfComplemento.getText());
-            clienteModel.setPesBairro("Recanto Azul");
-            clienteModel.setPesCidade("Bauru");
-            clienteModel.setPesUf("SP");
-            clienteModel.setPesCep("12345678");
+            clienteModel.setPesBairro(tfBairro.getText());
+            clienteModel.setPesCidade(tfCidade.getText());
+            clienteModel.setPesUf(tfUf.getText());
+            clienteModel.setPesCep(tfCep.getText());
             clienteModel.setPesSite(tfSite.getText());
             clienteModel.setPesEmail(tfEmail.getText());
-            clienteModel.setPesAtivo('y');
+            clienteModel.setPesAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
             clienteModel.setCliLimiteCred(BigDecimal.valueOf(100));
 
             try {
                 clienteController.cadastrarCliente(clienteModel);
                 JOptionPane.showMessageDialog(this.getParent(),"Usuario cadastrado");
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this.getParent(),"Usuario cadastrado");
+                JOptionPane.showMessageDialog(this.getParent(),"Usuario não cadastrado");
                 System.out.println(ex.getMessage());
                 throw new RuntimeException(ex);
             }
@@ -273,52 +279,87 @@ public class Cliente extends JPanel {
             }
         });
 
-    btnConsultar.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Cria e exibe uma nova janela
-            JFrame newFrame = new JFrame("Consultar Cliente");
-            newFrame.setSize(1200, 500);
-            newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            newFrame.setVisible(true);
-            newFrame.setLocationRelativeTo(null);
+        btnAlterar.addActionListener(e -> {
+            ClienteController clienteController = new ClienteController();
+            ClienteModel clienteModel = new ClienteModel();
+            clienteModel.setPesNome(tfNome.getText());
+            clienteModel.setPesCpfCnpj(tfCpfCnpj.getText());
+            clienteModel.setPesFantasia(tfNomeFantasia.getText());
+            clienteModel.setPesRgIe(tfRg.getText());
+            clienteModel.setPesFone1(tfCelular.getText());
+            clienteModel.setPesFone2(tfTel2.getText());
+            clienteModel.setPesEndereco(tfEndereco.getText());
+            clienteModel.setPesComplemento(tfComplemento.getText());
+            clienteModel.setPesCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            clienteModel.setPesFone1(tfTel1.getText());
+            clienteModel.setPesFone2(tfTel2.getText());
+            clienteModel.setPesCelular(tfCelular.getText());
+            clienteModel.setPesEndereco(tfEndereco.getText());
+            clienteModel.setPesNumero(tfNumero.getText());
+            clienteModel.setPesComplemento(tfComplemento.getText());
+            clienteModel.setPesBairro(tfBairro.getText());
+            clienteModel.setPesCidade(tfCidade.getText());
+            clienteModel.setPesUf(tfUf.getText());
+            clienteModel.setPesCep(tfCep.getText());
+            clienteModel.setPesSite(tfSite.getText());
+            clienteModel.setPesEmail(tfEmail.getText());
+            clienteModel.setPesAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+            clienteModel.setCliLimiteCred(BigDecimal.valueOf(Long.parseLong(tfLimiteCredito.getText())));
+            try {
+                clienteController.atualizarCliente(clienteModel,Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"Atualizado sá porra");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro para atualizar");
+                throw new RuntimeException(ex);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro para atualizar,valores indevidos para conversão");
 
-            // Cria um painel para adicionar componentes à nova janela
-            JPanel newPanel = new JPanel(new BorderLayout());
-            newFrame.add(newPanel);
+            }
+        });
+        btnConsultar.addActionListener( e -> {
+                // Cria e exibe uma nova janela
+                JFrame newFrame = new JFrame("Consultar Cliente");
+                newFrame.setSize(1200, 500);
+                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                newFrame.setVisible(true);
+                newFrame.setLocationRelativeTo(null);
 
-            // Adiciona vários componentes ao painel da nova janela
-            JPanel topPanel = new JPanel();
-            // Adiciona vários componentes ao painel da nova janela
-            topPanel.add(new JLabel("ID:"));
-            JTextField tfId = new JTextField(5);
-            topPanel.add(tfId);
+                // Cria um painel para adicionar componentes à nova janela
+                JPanel newPanel = new JPanel(new BorderLayout());
+                newFrame.add(newPanel);
 
-            topPanel.add(new JLabel("Nome:"));
-            JTextField tfNome = new JTextField(25);
-            topPanel.add(tfNome);
+                // Adiciona vários componentes ao painel da nova janela
+                JPanel topPanel = new JPanel();
+                // Adiciona vários componentes ao painel da nova janela
+                topPanel.add(new JLabel("ID:"));
+                JTextField tfId = new JTextField(5);
+                topPanel.add(tfId);
 
-            JButton btnConsultar = new JButton("Consultar");
-            topPanel.add(btnConsultar);
+                topPanel.add(new JLabel("Nome:"));
+                JTextField tfNome = new JTextField(25);
+                topPanel.add(tfNome);
 
-            JButton btnLimpar = new JButton("Limpar");
-            topPanel.add(btnLimpar);
-            
-            newPanel.add(topPanel, BorderLayout.NORTH);
+                JButton btnConsultar = new JButton("Consultar");
+                topPanel.add(btnConsultar);
 
-            String[][] data = {
-                    {"", "",  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",}};
-            
-            String[] columnNames = {"Código", "Nome", "Nome Fantasia", "Pessoa", "CPF/CNPJ", "RG", "Data Cadastro",
-                     "Endereço", "Número", "Complemento", "Bairro", "Cidade", "UF", "CEP",
-                     "Telefone 1", "Telefone 2", "Telefone Celular", "Site", "Email", "Ativo", "Limite Crédito"};
-            
-            JTable tUsuario = new JTable(data, columnNames);
-            
-            JScrollPane scrollPane = new JScrollPane(tUsuario);
-            newPanel.add(scrollPane, BorderLayout.CENTER);
-            
-        }
-    });
+                JButton btnLimpar = new JButton("Limpar");
+                topPanel.add(btnLimpar);
+
+                newPanel.add(topPanel, BorderLayout.NORTH);
+
+                String[][] data = {
+                        {"", "",  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",}};
+
+                String[] columnNames = {"Código", "Nome", "Nome Fantasia", "Pessoa", "CPF/CNPJ", "RG", "Data Cadastro",
+                        "Endereço", "Número", "Complemento", "Bairro", "Cidade", "UF", "CEP",
+                        "Telefone 1", "Telefone 2", "Telefone Celular", "Site", "Email", "Ativo", "Limite Crédito"};
+
+                JTable tUsuario = new JTable(data, columnNames);
+
+                JScrollPane scrollPane = new JScrollPane(tUsuario);
+                newPanel.add(scrollPane, BorderLayout.CENTER);
+        });
     }
 }
+
+

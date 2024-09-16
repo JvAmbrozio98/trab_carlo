@@ -1,8 +1,15 @@
 package modulovendas;
 
+import modulovendas.Controllers.FornecedorController;
+import modulovendas.Models.FornecedorModel;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 
 public class Fornecedor extends JPanel {
@@ -32,6 +39,7 @@ public class Fornecedor extends JPanel {
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
+        configuar();
     }
 
     public void instanciar() {
@@ -126,23 +134,23 @@ public class Fornecedor extends JPanel {
                 JButton btnLimpar = new JButton("Limpar");
                 topPanel.add(btnLimpar);
 
-                newPanel.add(topPanel, BorderLayout.NORTH); 
-                
+                newPanel.add(topPanel, BorderLayout.NORTH);
+
                 String[][] data = {
                         {"", "",  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",}};
-                
+
                 String[] columnNames = {"Código", "Nome", "Nome Fantasia", "Pessoa", "CPF/CNPJ", "RG", "Data Cadastro",
                          "Endereço", "Número", "Complemento", "Bairro", "Cidade", "UF", "CEP",
                          "Telefone 1", "Telefone 2", "Telefone Celular", "Site", "Email", "Ativo", "Contato Fornecedor"};
-                
+
                 JTable tFornecedor = new JTable(data, columnNames);
-                
+
                 JScrollPane scrollPane = new JScrollPane(tFornecedor);
                 newPanel.add(scrollPane, BorderLayout.CENTER);
-                
+
             }
         });
-        
+
     }
 
     public void adicionar() {
@@ -265,5 +273,45 @@ public class Fornecedor extends JPanel {
         
         // Posiciona Spinner
         spinner.setBounds(150, 300, 300, 25);
+    }
+
+    public void configuar () {
+        btnIncluir.addActionListener(e -> {
+            FornecedorModel fornecedorModel = new FornecedorModel();
+            FornecedorController fornecedorController = new FornecedorController();
+            fornecedorModel.setPesNome(tfNome.getText());
+            fornecedorModel.setPesCpfCnpj(tfCpfCnpj.getText());
+            fornecedorModel.setPesFantasia(tfNomeFantasia.getText());
+            fornecedorModel.setPesRgIe(tfRg.getText());
+            fornecedorModel.setPesFone1(tfCelular.getText());
+            fornecedorModel.setPesFone2(tfTel2.getText());
+            fornecedorModel.setPesEndereco(tfEndereco.getText());
+            fornecedorModel.setPesComplemento(tfComplemento.getText());
+            fornecedorModel.setPesCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            fornecedorModel.setPesFone1(tfTel1.getText());
+            fornecedorModel.setPesFone2(tfTel2.getText());
+            fornecedorModel.setPesCelular(tfCelular.getText());
+            fornecedorModel.setPesEndereco(tfEndereco.getText());
+            fornecedorModel.setPesNumero(tfNumero.getText());
+            fornecedorModel.setPesComplemento(tfComplemento.getText());
+            fornecedorModel.setPesBairro(tfBairro.getText());
+            fornecedorModel.setPesCidade(tfCidade.getText());
+            fornecedorModel.setPesUf(tfUf.getText());
+            fornecedorModel.setPesCep(tfCep.getText());
+            fornecedorModel.setPesSite(tfSite.getText());
+            fornecedorModel.setPesEmail(tfEmail.getText());
+            fornecedorModel.setPesAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+            fornecedorModel.setFor_contato(tfFornecedorCont.getText());
+
+            try {
+                fornecedorController.cadastrarFornecedor(fornecedorModel);
+                JOptionPane.showMessageDialog(this.getParent(),"Fornecedor cadastrado");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Usuario cadastrado");
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+
+        });
     }
 }

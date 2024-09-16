@@ -27,4 +27,12 @@ public class ClienteController {
             System.out.println(e.getMessage());
         }
     };
+
+    public void atualizarCliente (ClienteModel clienteModel,Integer id) throws SQLException  {
+        try {
+            this.clienteDAO.atualizar(clienteModel,id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

@@ -5,6 +5,8 @@ import modulovendas.Connection.ConnectionModule;
 
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClienteDAO {
     private Connection connectionModule;
@@ -67,40 +69,106 @@ public class ClienteDAO {
         stmPessoa.close();
     }
 
-    public void exluir (Integer id ) throws SQLException {
+    public void exluir(Integer id) throws SQLException {
 
-            String sql1 = "DELETE FROM cliente WHERE PES_CODIGO = ?";
-            String sql2 = "DELETE FROM pessoa WHERE PES_CODIGO = ?";
+        String sql1 = "DELETE FROM cliente WHERE PES_CODIGO = ?";
+        String sql2 = "DELETE FROM pessoa WHERE PES_CODIGO = ?";
 
-            // Delete from cliente
-            try (PreparedStatement pstmt1 = connectionModule.prepareStatement(sql1)) {
-                pstmt1.setInt(1, id); // Set the value for the placeholder
-                int affectedRows1 = pstmt1.executeUpdate();
+        // Delete from cliente
+        try (PreparedStatement pstmt1 = connectionModule.prepareStatement(sql1)) {
+            pstmt1.setInt(1, id); // Set the value for the placeholder
+            int affectedRows1 = pstmt1.executeUpdate();
 
-                if (affectedRows1 > 0) {
-                    System.out.println("Delete from cliente successful.");
-                } else {
-                    System.out.println("No records deleted from cliente.");
-                }
-            } catch (SQLException e) {
-                System.out.println("Error deleting from cliente: " + e.getMessage());
+            if (affectedRows1 > 0) {
+                System.out.println("Delete from cliente successful.");
+            } else {
+                System.out.println("No records deleted from cliente.");
             }
-
-            // Delete from pessoa
-            try (PreparedStatement pstmt2 = connectionModule.prepareStatement(sql2)) {
-                pstmt2.setInt(1, id); // Set the value for the placeholder
-                int affectedRows2 = pstmt2.executeUpdate();
-
-                if (affectedRows2 > 0) {
-                    System.out.println("Delete from pessoa successful.");
-                } else {
-                    System.out.println("No records deleted from pessoa.");
-                }
-            } catch (SQLException e) {
-                System.out.println("Error deleting from pessoa: " + e.getMessage());
-            }
+        } catch (SQLException e) {
+            System.out.println("Error deleting from cliente: " + e.getMessage());
         }
+
+        // Delete from pessoa
+        try (PreparedStatement pstmt2 = connectionModule.prepareStatement(sql2)) {
+            pstmt2.setInt(1, id); // Set the value for the placeholder
+            int affectedRows2 = pstmt2.executeUpdate();
+
+            if (affectedRows2 > 0) {
+                System.out.println("Delete from pessoa successful.");
+            } else {
+                System.out.println("No records deleted from pessoa.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error deleting from pessoa: " + e.getMessage());
+        }
+    }
+
+    public void atualizar(ClienteModel clienteModel, Integer id) throws SQLException {
+        // Ensure all fields (except PES_CODIGO) have valid values before updating
+        if (clienteModel.getPesNome() == null || clienteModel.getPesFantasia() == null ||
+                clienteModel.getPesCpfCnpj() == null || clienteModel.getPesEndereco() == null ||
+                clienteModel.getPesNumero() == null || clienteModel.getPesBairro() == null ||
+                clienteModel.getPesCidade() == null || clienteModel.getPesUf() == null ||
+                clienteModel.getPesCep() == null || clienteModel.getPesFone1() == null ||
+                clienteModel.getPesEmail() == null || clienteModel.getCliLimiteCred() == null) {
+
+            // Abort update if any required field is null
+            System.out.println("Update aborted: One or more required fields are missing.");
+            return;
+        }
+
+        // SQL query to update pessoa table
+        String sqlPessoa = "UPDATE pessoa SET " +
+                "PES_NOME = ?, PES_FANTASIA = ?, PES_CPFCNPJ = ?, PES_ENDERECO = ?, " +
+                "PES_NUMERO = ?, PES_BAIRRO = ?, PES_CIDADE = ?, PES_UF = ?, PES_CEP = ?, " +
+                "PES_FONE1 = ?, PES_EMAIL = ? WHERE PES_CODIGO = ?";
+
+        // SQL query to update cliente table
+        String sqlCliente = "UPDATE cliente SET " +
+                "CLI_LIMITECRED = ? WHERE PES_CODIGO = ?";
+
+        try (PreparedStatement stmPessoa = this.connectionModule.prepareStatement(sqlPessoa);
+             PreparedStatement stmCliente = this.connectionModule.prepareStatement(sqlCliente)) {
+
+            // Set values for the pessoa table
+            stmPessoa.setString(1, clienteModel.getPesNome().replace("\u0000", ""));
+            stmPessoa.setString(2, clienteModel.getPesFantasia().replace("\u0000", ""));
+            stmPessoa.setString(3, clienteModel.getPesCpfCnpj().replace("\u0000", ""));
+            stmPessoa.setString(4, clienteModel.getPesEndereco().replace("\u0000", ""));
+            stmPessoa.setString(5, clienteModel.getPesNumero().replace("\u0000", ""));
+            stmPessoa.setString(6, clienteModel.getPesBairro().replace("\u0000", ""));
+            stmPessoa.setString(7, clienteModel.getPesCidade().replace("\u0000", ""));
+            stmPessoa.setString(8, clienteModel.getPesUf().replace("\u0000", ""));
+            stmPessoa.setString(9, clienteModel.getPesCep().replace("\u0000", ""));
+            stmPessoa.setString(10, clienteModel.getPesFone1().replace("\u0000", ""));
+            stmPessoa.setString(11, clienteModel.getPesEmail().replace("\u0000", ""));
+            stmPessoa.setInt(12, id); // PES_CODIGO for WHERE clause
+
+            // Execute update for pessoa
+            int affectedRowsPessoa = stmPessoa.executeUpdate();
+
+            // Set values for the cliente table
+            stmCliente.setBigDecimal(1, clienteModel.getCliLimiteCred());
+            stmCliente.setInt(2, id); // PES_CODIGO for WHERE clause
+
+            // Execute update for cliente
+            int affectedRowsCliente = stmCliente.executeUpdate();
+
+            // Check if both updates were successful
+            if (affectedRowsPessoa > 0 && affectedRowsCliente > 0) {
+                System.out.println("Update successful.");
+            } else {
+                System.out.println("No records updated.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error updating record: " + e.getMessage());
+        }
+    }
+
+
 
 
 }
+
+
 

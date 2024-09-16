@@ -7,7 +7,7 @@ public class ConnectionModule {
     private final static String DRIVER = "org.postgresql.Driver";
     private final static String BANCO = "jdbc:postgresql://localhost:5432/postgres";
     private final static String USUARIO = "postgres";
-    private final static String SENHA = "449582301a";
+    private final static String SENHA = "postgres";
     private  java.sql.Connection conexao;
     private Statement stm;
 
