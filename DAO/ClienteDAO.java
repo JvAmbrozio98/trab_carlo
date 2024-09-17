@@ -103,6 +103,53 @@ public class ClienteDAO {
         }
     }
 
+    public ClienteModel consultar(int id) throws SQLException {
+        // Consulta SQL para buscar os dados do cliente com base no ID
+        String sql = "SELECT p.*, c.CLI_LIMITECRED " +
+                     "FROM pessoa p " +
+                     "JOIN cliente c ON p.PES_CODIGO = c.PES_CODIGO " +
+                     "WHERE p.PES_CODIGO = ?";
+    
+        // Cria um PreparedStatement para a consulta
+        try (PreparedStatement pstmt = connectionModule.prepareStatement(sql)) {
+            pstmt.setInt(1, id); // Define o valor do ID na consulta
+            
+            // Executa a consulta
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // Cria um objeto ClienteModel e define seus atributos com os valores obtidos
+                    ClienteModel cliente = new ClienteModel();
+                    cliente.setPesCodigo(rs.getInt("PES_CODIGO"));
+                    cliente.setPesNome(rs.getString("PES_NOME"));
+                    cliente.setPesFantasia(rs.getString("PES_FANTASIA"));
+                    cliente.setPesFisica(rs.getBoolean("PES_FISICA"));
+                    cliente.setPesCpfCnpj(rs.getString("PES_CPFCNPJ"));
+                    cliente.setPesRgIe(rs.getString("PES_RGIE"));
+                    cliente.setPesCadastro(rs.getDate("PES_CADASTRO").toLocalDate());
+                    cliente.setPesEndereco(rs.getString("PES_ENDERECO"));
+                    cliente.setPesNumero(rs.getString("PES_NUMERO"));
+                    cliente.setPesComplemento(rs.getString("PES_COMPLEMENTO"));
+                    cliente.setPesBairro(rs.getString("PES_BAIRRO"));
+                    cliente.setPesCidade(rs.getString("PES_CIDADE"));
+                    cliente.setPesUf(rs.getString("PES_UF"));
+                    cliente.setPesCep(rs.getString("PES_CEP"));
+                    cliente.setPesFone1(rs.getString("PES_FONE1"));
+                    cliente.setPesFone2(rs.getString("PES_FONE2"));
+                    cliente.setPesCelular(rs.getString("PES_CELULAR"));
+                    cliente.setPesSite(rs.getString("PES_SITE"));
+                    cliente.setPesEmail(rs.getString("PES_EMAIL"));
+                    cliente.setPesAtivo(rs.getBoolean("PES_ATIVO"));
+                    cliente.setCliLimiteCred(rs.getBigDecimal("CLI_LIMITECRED"));
+                    
+                    return cliente;
+                } else {
+                    throw new SQLException("Cliente com ID " + id + " não encontrado.");
+                }
+            }
+        }
+    }
+    
+
     public void atualizar(ClienteModel clienteModel, Integer id) throws SQLException {
         // Ensure all fields (except PES_CODIGO) have valid values before updating
         if (clienteModel.getPesNome() == null || clienteModel.getPesFantasia() == null ||

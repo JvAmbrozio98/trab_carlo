@@ -20,6 +20,15 @@ public class ClienteController {
         }
     }
 
+    public ClienteModel consultarCliente(int id) {
+        try {
+            return clienteDAO.consultar(id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     public void excluirCliente (Integer id) throws  SQLException {
         try {
             this.clienteDAO.exluir(id);

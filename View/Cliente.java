@@ -14,27 +14,24 @@ import java.time.format.DateTimeFormatter;
 
 public class Cliente extends JPanel {
 
-    private JLabel lblId, lblNome, lblNomeFantasia, lblPessoa, lblRg, lblDatacadastro, lblEndereco, 
+    private JLabel lblId, lblNome, lblNomeFantasia, lblPessoa, lblRg, lblDatacadastro, lblEndereco,
             lblNumero, lblComplemento, lblBairro, lblCidade, lblUf, lblCep, lblTel1, lblTel2, lblCelular, lblSite,
             lblEmail, lblAtivo, lblLimiteCredito;
-    
+
     private JTextField tfId, tfNome, tfNomeFantasia, tfCpfCnpj, tfRg, tfEndereco, tfNumero, tfComplemento, tfCep,
             tfTel1, tfTel2, tfCelular, tfSite, tfEmail, tfLimiteCredito, tfBairro, tfCidade, tfUf;
-    
+
     private JComboBox<String> cbPesFiJu, cbAtivo;
-    
+
     private JButton btnIncluir, btnAlterar, btnConsultar, btnExcluir;
-    
+
     private JSpinner spinner;
-    
+
     private SpinnerDateModel model;
 
-
     String[] pesFJ = { "Física", "Jurídica" };
-    
+
     String[] ativo = { "Ativo", "Não Ativo" };
-
-
 
     public Cliente() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
@@ -67,7 +64,7 @@ public class Cliente extends JPanel {
         lblEmail = new JLabel("Email");
         lblAtivo = new JLabel("Ativo");
         lblLimiteCredito = new JLabel("Limite Crédito");
-        
+
         // TextFields
         tfId = new JTextField();
         tfNome = new JTextField();
@@ -87,7 +84,7 @@ public class Cliente extends JPanel {
         tfBairro = new JTextField();
         tfCidade = new JTextField();
         tfUf = new JTextField();
-        
+
         // ComboBoxes
         cbPesFiJu = new JComboBox(pesFJ);
         cbAtivo = new JComboBox(ativo);
@@ -104,7 +101,6 @@ public class Cliente extends JPanel {
         // Create a DateEditor for the spinner to format the date display
         JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "yyyy-MM-dd");
         spinner.setEditor(editor);
-
 
     }
 
@@ -131,7 +127,7 @@ public class Cliente extends JPanel {
         add(lblEmail);
         add(lblAtivo);
         add(lblLimiteCredito);
-        
+
         // Adiciona TextFields
         add(tfId);
         add(tfNome);
@@ -160,7 +156,7 @@ public class Cliente extends JPanel {
         add(btnAlterar);
         add(btnConsultar);
         add(btnExcluir);
-        
+
         // Add Spinneer
         add(spinner);
 
@@ -175,7 +171,7 @@ public class Cliente extends JPanel {
         lblPessoa.setBounds(25, 140, 90, 25);
         lblRg.setBounds(25, 260, 90, 25);
         lblDatacadastro.setBounds(25, 300, 120, 25);
-        
+
         lblEndereco.setBounds(500, 60, 90, 25);
         lblNumero.setBounds(500, 100, 90, 25);
         lblComplemento.setBounds(500, 140, 100, 25);
@@ -183,23 +179,23 @@ public class Cliente extends JPanel {
         lblCidade.setBounds(500, 220, 90, 25);
         lblUf.setBounds(500, 260, 90, 25); // reduzir 40 neste acima
         lblCep.setBounds(500, 300, 90, 25);
-        
+
         lblTel1.setBounds(25, 380, 90, 25);
         lblTel2.setBounds(25, 420, 90, 25);
         lblCelular.setBounds(25, 460, 120, 25);
         lblSite.setBounds(500, 380, 90, 25);
         lblEmail.setBounds(500, 420, 90, 25);
         lblAtivo.setBounds(500, 460, 90, 25);
-        
+
         lblLimiteCredito.setBounds(500, 500, 120, 25);
-        
+
         // Posiciona TextFields
         tfId.setBounds(150, 20, 300, 25);
         tfNome.setBounds(150, 60, 300, 25);
         tfNomeFantasia.setBounds(150, 100, 300, 25);
         tfCpfCnpj.setBounds(25, 220, 300, 25);
         tfRg.setBounds(150, 260, 300, 25);
-        
+
         tfEndereco.setBounds(600, 60, 300, 25);
         tfNumero.setBounds(600, 100, 300, 25);
         tfComplemento.setBounds(600, 140, 300, 25);
@@ -214,23 +210,23 @@ public class Cliente extends JPanel {
         tfSite.setBounds(600, 380, 300, 25);
         tfEmail.setBounds(600, 420, 300, 25);
         tfLimiteCredito.setBounds(600, 500, 300, 25);
-        
+
         // Posiciona ComboBoxes
 
         cbPesFiJu.setBounds(25, 180, 100, 25);
         cbAtivo.setBounds(600, 460, 100, 25);
-        
+
         // Posiciona Buttons
         btnIncluir.setBounds(560, 0, 100, 20);
         btnAlterar.setBounds(660, 0, 100, 20);
         btnConsultar.setBounds(760, 0, 100, 20);
         btnExcluir.setBounds(860, 0, 100, 20);
-        
+
         // Posiciona Spinner
         spinner.setBounds(150, 300, 300, 25);
     }
 
-    public void configurar () {
+    public void configurar() {
         btnIncluir.addActionListener(e -> {
             ClienteController clienteController = new ClienteController();
             ClienteModel clienteModel = new ClienteModel();
@@ -242,7 +238,8 @@ public class Cliente extends JPanel {
             clienteModel.setPesFone2(tfTel2.getText());
             clienteModel.setPesEndereco(tfEndereco.getText());
             clienteModel.setPesComplemento(tfComplemento.getText());
-            clienteModel.setPesCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            clienteModel
+                    .setPesCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
             clienteModel.setPesFone1(tfTel1.getText());
             clienteModel.setPesFone2(tfTel2.getText());
             clienteModel.setPesCelular(tfCelular.getText());
@@ -260,9 +257,9 @@ public class Cliente extends JPanel {
 
             try {
                 clienteController.cadastrarCliente(clienteModel);
-                JOptionPane.showMessageDialog(this.getParent(),"Usuario cadastrado");
+                JOptionPane.showMessageDialog(this.getParent(), "Usuario cadastrado");
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this.getParent(),"Usuario não cadastrado");
+                JOptionPane.showMessageDialog(this.getParent(), "Usuario não cadastrado");
                 System.out.println(ex.getMessage());
                 throw new RuntimeException(ex);
             }
@@ -272,9 +269,9 @@ public class Cliente extends JPanel {
             ClienteController clienteController = new ClienteController();
             try {
                 clienteController.excluirCliente(Integer.valueOf(tfId.getText()));
-                JOptionPane.showMessageDialog(this.getParent(),"O puto foi excluido");
+                JOptionPane.showMessageDialog(this.getParent(), "O puto foi excluido");
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this.getParent(),"Erron a exclusão");
+                JOptionPane.showMessageDialog(this.getParent(), "Erron a exclusão");
                 throw new RuntimeException(ex);
             }
         });
@@ -306,60 +303,78 @@ public class Cliente extends JPanel {
             clienteModel.setPesAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
             clienteModel.setCliLimiteCred(BigDecimal.valueOf(Long.parseLong(tfLimiteCredito.getText())));
             try {
-                clienteController.atualizarCliente(clienteModel,Integer.valueOf(tfId.getText()));
-                JOptionPane.showMessageDialog(this.getParent(),"Atualizado sá porra");
+                clienteController.atualizarCliente(clienteModel, Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(), "Atualizado sá porra");
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this.getParent(),"Erro para atualizar");
+                JOptionPane.showMessageDialog(this.getParent(), "Erro para atualizar");
                 throw new RuntimeException(ex);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this.getParent(),"Erro para atualizar,valores indevidos para conversão");
+                JOptionPane.showMessageDialog(this.getParent(), "Erro para atualizar,valores indevidos para conversão");
 
             }
         });
-        btnConsultar.addActionListener( e -> {
-                // Cria e exibe uma nova janela
-                JFrame newFrame = new JFrame("Consultar Cliente");
-                newFrame.setSize(1200, 500);
-                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                newFrame.setVisible(true);
-                newFrame.setLocationRelativeTo(null);
+        btnConsultar.addActionListener(e -> {
+            // Cria e exibe uma nova janela
+            JFrame newFrame = new JFrame("Consultar Cliente");
+            newFrame.setSize(1200, 500);
+            newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            newFrame.setVisible(true);
+            newFrame.setLocationRelativeTo(null);
 
-                // Cria um painel para adicionar componentes à nova janela
-                JPanel newPanel = new JPanel(new BorderLayout());
-                newFrame.add(newPanel);
+            // Cria um painel para adicionar componentes à nova janela
+            JPanel newPanel = new JPanel(new BorderLayout());
+            newFrame.add(newPanel);
 
-                // Adiciona vários componentes ao painel da nova janela
-                JPanel topPanel = new JPanel();
-                // Adiciona vários componentes ao painel da nova janela
-                topPanel.add(new JLabel("ID:"));
-                JTextField tfId = new JTextField(5);
-                topPanel.add(tfId);
+            // Adiciona vários componentes ao painel da nova janela
+            JPanel topPanel = new JPanel();
+            // Adiciona vários componentes ao painel da nova janela
+            topPanel.add(new JLabel("ID:"));
+            JTextField tfId = new JTextField(5);
+            topPanel.add(tfId);
 
-                topPanel.add(new JLabel("Nome:"));
-                JTextField tfNome = new JTextField(25);
-                topPanel.add(tfNome);
+            topPanel.add(new JLabel("Nome:"));
+            JTextField tfNome = new JTextField(25);
+            topPanel.add(tfNome);
 
-                JButton btnConsultar = new JButton("Consultar");
-                topPanel.add(btnConsultar);
+            JButton btnConsultar = new JButton("Consultar");
+            topPanel.add(btnConsultar);
 
-                JButton btnLimpar = new JButton("Limpar");
-                topPanel.add(btnLimpar);
+            btnConsultar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        int id = Integer.parseInt(tfId.getText());
+                        ClienteModel cliente = clienteController.consultarCliente(id);
+                        if (cliente != null) {
+                            taResultado.setText(
+                                    "Nome: " + cliente.getPesNome() + "\n" +
+                                            "Nome Fantasia: " + cliente.getPesFantasia() + "\n" +
+                                            "CPF/CNPJ: " + cliente.getPesCpfCnpj() + "\n" +
+                                            "Data Cadastro: " + cliente.getPesCadastro() + "\n" +
+                                            "Limite de Crédito: " + cliente.getCliLimiteCred());
+                        } else {
+                            taResultado.setText("Cliente não encontrado.");
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(frame, "ID inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
 
-                newPanel.add(topPanel, BorderLayout.NORTH);
+            JButton btnLimpar = new JButton("Limpar");
+            topPanel.add(btnLimpar);
 
-                String[][] data = {
-                        {"", "",  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",}};
+            newPanel.add(topPanel, BorderLayout.NORTH);
 
-                String[] columnNames = {"Código", "Nome", "Nome Fantasia", "Pessoa", "CPF/CNPJ", "RG", "Data Cadastro",
-                        "Endereço", "Número", "Complemento", "Bairro", "Cidade", "UF", "CEP",
-                        "Telefone 1", "Telefone 2", "Telefone Celular", "Site", "Email", "Ativo", "Limite Crédito"};
+            String[][] data = {
+                    { "", "", "", "", "" } };
 
-                JTable tUsuario = new JTable(data, columnNames);
+            String[] columnNames = { "Nome", "Nome Fantasia", "CPF/CNPJ", "Data Cadastro", "Limite Crédito" };
 
-                JScrollPane scrollPane = new JScrollPane(tUsuario);
-                newPanel.add(scrollPane, BorderLayout.CENTER);
+            JTable tUsuario = new JTable(data, columnNames);
+
+            JScrollPane scrollPane = new JScrollPane(tUsuario);
+            newPanel.add(scrollPane, BorderLayout.CENTER);
         });
     }
 }
-
-
