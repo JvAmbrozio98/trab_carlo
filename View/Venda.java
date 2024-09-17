@@ -1,6 +1,11 @@
 package modulovendas;
 
+import modulovendas.Controllers.VendaController;
+import modulovendas.Models.VendaModels;
+
 import javax.swing.*;
+import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Venda extends JPanel {
 
@@ -49,6 +54,7 @@ public class Venda extends JPanel {
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
+        configurar();
     }
 
     public void instanciar() {
@@ -195,4 +201,25 @@ public class Venda extends JPanel {
         // Posiciona Spinner
         spinner.setBounds(150, 140, 300, 25);
     }
+
+    public void configurar () {
+        AtomicReference<Integer> valorGaurdado = new AtomicReference<>(0);
+        btnIncluir.addActionListener(e -> {
+            VendaController vendaController = new VendaController();
+            VendaModels vendaModels = new VendaModels();
+            vendaModels.setUsuCodigo(Integer.valueOf(cbIdUsu.getText()));
+            vendaModels.setCliCodigo(Integer.valueOf(cbIdCli.getText()));
+            vendaModels.setVdaData(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            vendaModels.setVdaValor(BigDecimal.valueOf(Long.parseLong(tfValor.getText())));
+            vendaModels.setVdaTotal(BigDecimal.valueOf(Long.parseLong(tfTotal.getText())));
+            vendaModels.setVdaDesconto(BigDecimal.valueOf(Long.parseLong(tfTotal.getText())));
+            vendaModels.setVdaObs(taObs.getText());
+            try {
+                vendaController.cadastrarVenda(vendaModels);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+
+        });
+    };
 }
