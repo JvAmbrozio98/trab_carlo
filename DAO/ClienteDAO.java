@@ -122,7 +122,7 @@ public class ClienteDAO {
                     cliente.setPesCodigo(rs.getInt("PES_CODIGO"));
                     cliente.setPesNome(rs.getString("PES_NOME"));
                     cliente.setPesFantasia(rs.getString("PES_FANTASIA"));
-                    cliente.setPesFisica(rs.getBoolean("PES_FISICA"));
+                    cliente.setPesFisica(rs.getChar("PES_FISICA"));
                     cliente.setPesCpfCnpj(rs.getString("PES_CPFCNPJ"));
                     cliente.setPesRgIe(rs.getString("PES_RGIE"));
                     cliente.setPesCadastro(rs.getDate("PES_CADASTRO").toLocalDate());
@@ -138,8 +138,8 @@ public class ClienteDAO {
                     cliente.setPesCelular(rs.getString("PES_CELULAR"));
                     cliente.setPesSite(rs.getString("PES_SITE"));
                     cliente.setPesEmail(rs.getString("PES_EMAIL"));
-                    cliente.setPesAtivo(rs.getBoolean("PES_ATIVO"));
-                    cliente.setCliLimiteCred(rs.getBigDecimal("CLI_LIMITECRED"));
+                    cliente.setPesAtivo(rs.getChar("PES_ATIVO"));
+                    cliente.setCliLimiteCred(rs.getInt("CLI_LIMITECRED"));
                     
                     return cliente;
                 } else {

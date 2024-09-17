@@ -4,6 +4,8 @@ import modulovendas.Controllers.ClienteController;
 import modulovendas.Models.ClienteModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -238,8 +240,7 @@ public class Cliente extends JPanel {
             clienteModel.setPesFone2(tfTel2.getText());
             clienteModel.setPesEndereco(tfEndereco.getText());
             clienteModel.setPesComplemento(tfComplemento.getText());
-            clienteModel
-                    .setPesCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            clienteModel.setPesCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
             clienteModel.setPesFone1(tfTel1.getText());
             clienteModel.setPesFone2(tfTel2.getText());
             clienteModel.setPesCelular(tfCelular.getText());
@@ -336,45 +337,57 @@ public class Cliente extends JPanel {
             JTextField tfNome = new JTextField(25);
             topPanel.add(tfNome);
 
-            JButton btnConsultar = new JButton("Consultar");
-            topPanel.add(btnConsultar);
-
-            btnConsultar.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        int id = Integer.parseInt(tfId.getText());
-                        ClienteModel cliente = clienteController.consultarCliente(id);
-                        if (cliente != null) {
-                            taResultado.setText(
-                                    "Nome: " + cliente.getPesNome() + "\n" +
-                                            "Nome Fantasia: " + cliente.getPesFantasia() + "\n" +
-                                            "CPF/CNPJ: " + cliente.getPesCpfCnpj() + "\n" +
-                                            "Data Cadastro: " + cliente.getPesCadastro() + "\n" +
-                                            "Limite de Crédito: " + cliente.getCliLimiteCred());
-                        } else {
-                            taResultado.setText("Cliente não encontrado.");
-                        }
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(frame, "ID inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            });
+            JButton btnConsultarInterno = new JButton("Consultar");
+            topPanel.add(btnConsultarInterno);
 
             JButton btnLimpar = new JButton("Limpar");
             topPanel.add(btnLimpar);
 
             newPanel.add(topPanel, BorderLayout.NORTH);
 
-            String[][] data = {
-                    { "", "", "", "", "" } };
-
-            String[] columnNames = { "Nome", "Nome Fantasia", "CPF/CNPJ", "Data Cadastro", "Limite Crédito" };
-
-            JTable tUsuario = new JTable(data, columnNames);
+            // Cria o modelo da tabela e a JTable
+            DefaultTableModel tableModel = new DefaultTableModel(
+                    new String[] { "Nome", "Nome Fantasia", "CPF/CNPJ", "Data Cadastro", "Limite Crédito" }, 0);
+            JTable tUsuario = new JTable(tableModel);
 
             JScrollPane scrollPane = new JScrollPane(tUsuario);
             newPanel.add(scrollPane, BorderLayout.CENTER);
+
+            // Ação do botão "Consultar" na nova janela
+            btnConsultarInterno.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        int id = Integer.parseInt(tfId.getText());
+                        ClienteModel cliente = clienteController.consultarCliente(id);
+                        if (cliente != null) {
+                            // Limpar a tabela antes de adicionar novos dados
+                            tableModel.setRowCount(0);
+                            tableModel.addRow(new Object[] {
+                                    cliente.getPesNome(),
+                                    cliente.getPesFantasia(),
+                                    cliente.getPesCpfCnpj(),
+                                    cliente.getPesCadastro(),
+                                    cliente.getCliLimiteCred()
+                            });
+                        } else {
+                            // Limpar a tabela e exibir mensagem de cliente não encontrado
+                            tableModel.setRowCount(0);
+                            JOptionPane.showMessageDialog(newFrame, "Cliente não encontrado.", "Aviso",
+                                    JOptionPane.WARNING_MESSAGE);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(newFrame, "ID inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+
+            // Ação do botão "Limpar"
+            btnLimpar.addActionListener(f -> {
+                tfId.setText("");
+                tableModel.setRowCount(0); // Limpar a tabela
+            });
+
         });
     }
 }
