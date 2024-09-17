@@ -139,7 +139,7 @@ public class ClienteDAO {
                     cliente.setPesSite(rs.getString("PES_SITE"));
                     cliente.setPesEmail(rs.getString("PES_EMAIL"));
                     cliente.setPesAtivo(rs.getChar("PES_ATIVO"));
-                    cliente.setCliLimiteCred(rs.getInt("CLI_LIMITECRED"));
+                    cliente.setCliLimiteCred(rs.getBigDecimal("CLI_LIMITECRED"));
                     
                     return cliente;
                 } else {
