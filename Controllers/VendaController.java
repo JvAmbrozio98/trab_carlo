@@ -30,5 +30,14 @@ public class VendaController {
         }
     }
 
+    public void atualizarVenda (Integer id,VendaModels vendaModels) {
+        try {
+            this.vendaDAO.atualizarVenda(id,vendaModels);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
