@@ -216,10 +216,45 @@ public class Venda extends JPanel {
             vendaModels.setVdaObs(taObs.getText());
             try {
                 vendaController.cadastrarVenda(vendaModels);
+                JOptionPane.showMessageDialog(this.getParent(),"A venda foi cadastrada");
             } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro ao cadastrar");
                 throw new RuntimeException(ex);
             }
 
         });
+
+        btnExcluir.addActionListener(e -> {
+            VendaController vendaController = new VendaController();
+            try {
+                vendaController.deletarVenda(Long.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"A venda foi cadastrada");
+            } catch (Exception expt) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro ao excluir");
+                throw new RuntimeException(expt);
+            }
+        });
+
+        btnAlterar.addActionListener(e -> {
+            VendaController vendaController = new VendaController();
+            VendaModels vendaModels = new VendaModels();
+            vendaModels.setUsuCodigo(Integer.valueOf(cbIdUsu.getText()));
+            vendaModels.setCliCodigo(Integer.valueOf(cbIdCli.getText()));
+            vendaModels.setVdaData(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            vendaModels.setVdaValor(BigDecimal.valueOf(Long.parseLong(tfValor.getText())));
+            vendaModels.setVdaTotal(BigDecimal.valueOf(Long.parseLong(tfTotal.getText())));
+            vendaModels.setVdaDesconto(BigDecimal.valueOf(Long.parseLong(tfTotal.getText())));
+            vendaModels.setVdaObs(taObs.getText());
+
+            try {
+                vendaController.atualizarVenda(Integer.valueOf(tfId.getText()),vendaModels);
+                JOptionPane.showMessageDialog(this.getParent(),"A venda foi alterada");
+            } catch (Exception err) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro ao alterar");
+                throw new RuntimeException(err);
+            };
+        });
+
+
     };
 }

@@ -45,6 +45,31 @@ public class VendaDAO {
 
 
     // Método para atualizar uma venda existente no banco de dados
+    public void atualizarVenda(Integer id,VendaModels venda) throws SQLException {
+        String sql = "UPDATE VENDA SET USU_CODIGO = ?, CLI_CODIGO = ?, VDA_DATA = ?, VDA_VALOR = ?, VDA_DESCONTO = ?, VDA_TOTAL = ?, VDA_OBS = ? " +
+                "WHERE VDA_CODIGO = ?";
+
+        try (PreparedStatement pstmt = connectionModule.prepareStatement(sql)) {
+            pstmt.setInt(1, venda.usuCodigo);
+            pstmt.setInt(2, venda.cliCodigo);
+            pstmt.setDate(3, Date.valueOf(venda.vdaData));
+            pstmt.setBigDecimal(4, venda.vdaValor);
+            pstmt.setBigDecimal(5, venda.vdaDesconto);
+            pstmt.setBigDecimal(6, venda.vdaTotal);
+            pstmt.setString(7, venda.vdaObs);
+            pstmt.setLong(8, id);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Venda atualizada com sucesso.");
+            } else {
+                System.out.println("Nenhuma venda encontrada com o código informado.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar venda: " + e.getMessage());
+            throw e;
+        }
+    }
 
 
     // Método para deletar uma venda no banco de dados
