@@ -2,7 +2,7 @@ package modulovendas.Models;
 
 import java.time.LocalDate;
 
-public class Usuario {
+public class UsuarioModel {
     public long usuCodigo;      // USU_CODIGO (SERIAL)
     public String usuNome;      // USU_NOME (VARCHAR(80))
     public String usuLogin;     // USU_LOGIN (VARCHAR(20))
@@ -10,10 +10,10 @@ public class Usuario {
     public LocalDate usuCadastro; // USU_CADASTRO (DATE)
     public char usuAtivo;       // USU_ATIVO (CHAR(1))
 
-    public Usuario() {
+    public UsuarioModel() {
     }
 
-    public Usuario(char usuAtivo, LocalDate usuCadastro, String usuSenha, String usuLogin, String usuNome, long usuCodigo) {
+    public UsuarioModel(char usuAtivo, LocalDate usuCadastro, String usuSenha, String usuLogin, String usuNome, long usuCodigo) {
         this.usuAtivo = usuAtivo;
         this.usuCadastro = usuCadastro;
         this.usuSenha = usuSenha;

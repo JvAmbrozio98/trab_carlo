@@ -1,9 +1,14 @@
 package modulovendas;
 
+import modulovendas.Controllers.ProdutoControllers;
+import modulovendas.Models.ProdutoModel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.sql.SQLException;
 
 public class Produto extends JPanel {
 
@@ -29,6 +34,7 @@ public class Produto extends JPanel {
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
+        configurar();
     }
 
     public void instanciar() {
@@ -219,5 +225,73 @@ public class Produto extends JPanel {
 
         // Posiciona Spinner
         spinner.setBounds(600, 320, 300, 25);
+    }
+    public void configurar () {
+        btnIncluir.addActionListener(e -> {
+            ProdutoModel produtoModel = new ProdutoModel();
+            ProdutoControllers produtoControllers = new ProdutoControllers();
+            produtoModel.setProNome(tfNome.getText());
+            produtoModel.setProEstoque(BigDecimal.valueOf(Long.parseLong(tfEstoque.getText())));
+            produtoModel.setProUnidade(tfUnidade.getText());
+            produtoModel.setProPreco(BigDecimal.valueOf(Long.parseLong(tfPreco.getText())));
+            produtoModel.setProCusto(BigDecimal.valueOf(Long.parseLong(tfCusto.getText())));
+            produtoModel.setProAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+            produtoModel.setProAtacado(BigDecimal.valueOf(Long.parseLong(tfAtacado.getText())));
+            produtoModel.setProMin(BigDecimal.valueOf(Long.parseLong(tfMin.getText())));
+            produtoModel.setProMax(BigDecimal.valueOf(Long.parseLong(tfMax.getText())));
+            produtoModel.setProEmbalagem(BigDecimal.valueOf(Long.parseLong(tfEmbalagem.getText())));
+            produtoModel.setProPeso(BigDecimal.valueOf(Long.parseLong(tfPeso.getText())));
+            produtoModel.setProCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            produtoModel.setProObs(tfObs.getText());
+            try {
+                produtoControllers.cadastrarProduto(produtoModel);
+                JOptionPane.showMessageDialog(this.getParent(),"Produto cadastrado");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Produto não cadastrado");
+                throw new RuntimeException(ex);
+            } catch (NumberFormatException ex2) {
+                JOptionPane.showMessageDialog(this.getParent(),"Produto não cadastrado");
+            }
+        });
+
+
+        btnExcluir.addActionListener(e -> {
+            ProdutoControllers produtoControllers = new ProdutoControllers();
+            try {
+                produtoControllers.excluirProduto(Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"Produto excluido");
+
+            } catch (SQLException ex) {
+                  JOptionPane.showMessageDialog(this.getParent(),"Erro ao excluir produto");
+//                throw new RuntimeException(ex);
+            }
+        });
+
+        btnAlterar.addActionListener(e -> {
+            ProdutoControllers produtoControllers = new ProdutoControllers();
+            ProdutoModel produtoModel = new ProdutoModel();
+            produtoModel.setProNome(tfNome.getText());
+            produtoModel.setProEstoque(BigDecimal.valueOf(Long.parseLong(tfEstoque.getText())));
+            produtoModel.setProUnidade(tfUnidade.getText());
+            produtoModel.setProPreco(BigDecimal.valueOf(Long.parseLong(tfPreco.getText())));
+            produtoModel.setProCusto(BigDecimal.valueOf(Long.parseLong(tfCusto.getText())));
+            produtoModel.setProAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+            produtoModel.setProAtacado(BigDecimal.valueOf(Long.parseLong(tfAtacado.getText())));
+            produtoModel.setProMin(BigDecimal.valueOf(Long.parseLong(tfMin.getText())));
+            produtoModel.setProMax(BigDecimal.valueOf(Long.parseLong(tfMax.getText())));
+            produtoModel.setProEmbalagem(BigDecimal.valueOf(Long.parseLong(tfEmbalagem.getText())));
+            produtoModel.setProPeso(BigDecimal.valueOf(Long.parseLong(tfPeso.getText())));
+            produtoModel.setProCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            produtoModel.setProObs(tfObs.getText());
+            try {
+                produtoControllers.atualizarProduto(produtoModel,Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"Produto alterado");
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Alteração não deu");
+                throw new RuntimeException(ex);
+            }
+
+        });
     }
 }

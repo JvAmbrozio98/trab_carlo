@@ -1,6 +1,7 @@
 package modulovendas;
 
 import modulovendas.Controllers.FornecedorController;
+import modulovendas.DAO.FornecedorDAO;
 import modulovendas.Models.FornecedorModel;
 
 import java.awt.BorderLayout;
@@ -313,5 +314,54 @@ public class Fornecedor extends JPanel {
             }
 
         });
+        btnAlterar.addActionListener(e -> {
+            FornecedorModel fornecedorModel = new FornecedorModel();
+            FornecedorController fornecedorController = new FornecedorController();
+            fornecedorModel.setPesNome(tfNome.getText());
+            fornecedorModel.setPesCpfCnpj(tfCpfCnpj.getText());
+            fornecedorModel.setPesFantasia(tfNomeFantasia.getText());
+            fornecedorModel.setPesRgIe(tfRg.getText());
+            fornecedorModel.setPesFone1(tfCelular.getText());
+            fornecedorModel.setPesFone2(tfTel2.getText());
+            fornecedorModel.setPesEndereco(tfEndereco.getText());
+            fornecedorModel.setPesComplemento(tfComplemento.getText());
+            fornecedorModel.setPesCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            fornecedorModel.setPesFone1(tfTel1.getText());
+            fornecedorModel.setPesFone2(tfTel2.getText());
+            fornecedorModel.setPesCelular(tfCelular.getText());
+            fornecedorModel.setPesEndereco(tfEndereco.getText());
+            fornecedorModel.setPesNumero(tfNumero.getText());
+            fornecedorModel.setPesComplemento(tfComplemento.getText());
+            fornecedorModel.setPesBairro(tfBairro.getText());
+            fornecedorModel.setPesCidade(tfCidade.getText());
+            fornecedorModel.setPesUf(tfUf.getText());
+            fornecedorModel.setPesCep(tfCep.getText());
+            fornecedorModel.setPesSite(tfSite.getText());
+            fornecedorModel.setPesEmail(tfEmail.getText());
+            fornecedorModel.setPesAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+            fornecedorModel.setFor_contato(tfFornecedorCont.getText());
+            try {
+                fornecedorController.alterarFornecedor(fornecedorModel,Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"Atualizado sá porra");
+
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro para atualizar");
+                throw new RuntimeException(ex);
+            }
+
+        });
+
+        btnExcluir.addActionListener(e -> {
+            FornecedorController fornecedorController = new FornecedorController();
+            try {
+                fornecedorController.excluirFornecedor(Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"O Fornecedor foi excluido");
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro na exclusão");
+                throw new RuntimeException(ex);
+            }
+
+        });
     }
+
 }

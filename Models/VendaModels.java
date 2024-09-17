@@ -3,7 +3,7 @@ package modulovendas.Models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Venda {
+public class VendaModels {
     public long vdaCodigo;         // VDA_CODIGO (SERIAL)
     public int usuCodigo;          // USU_CODIGO (INTEGER)
     public int cliCodigo;          // CLI_CODIGO (INTEGER)
@@ -13,10 +13,10 @@ public class Venda {
     public BigDecimal vdaTotal;    // VDA_TOTAL (NUMERIC(18,2))
     public String vdaObs;          // VDA_OBS (TEXT)
 
-    public Venda() {
+    public VendaModels() {
     }
 
-    public Venda(long vdaCodigo, int usuCodigo, int cliCodigo, LocalDate vdaData, BigDecimal vdaValor, BigDecimal vdaDesconto, BigDecimal vdaTotal, String vdaObs) {
+    public VendaModels(long vdaCodigo, int usuCodigo, int cliCodigo, LocalDate vdaData, BigDecimal vdaValor, BigDecimal vdaDesconto, BigDecimal vdaTotal, String vdaObs) {
         this.vdaCodigo = vdaCodigo;
         this.usuCodigo = usuCodigo;
         this.cliCodigo = cliCodigo;

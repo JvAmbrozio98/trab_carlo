@@ -37,7 +37,7 @@ public class Login extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Cria e exibe a tela Dashboard
-                new Dashboard();
+                new modulovendas.Dashboard();
                 // Fecha a tela de login
                 dispose();
             }

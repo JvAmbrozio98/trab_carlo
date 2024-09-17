@@ -1,9 +1,13 @@
 
 package modulovendas;
 
+import modulovendas.Controllers.UsuarioController;
+import modulovendas.Models.UsuarioModel;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import javax.swing.*;
 
 
@@ -31,6 +35,7 @@ public class Usuario extends JPanel {
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
+        configurar();
     }
 
     public void instanciar() {
@@ -176,5 +181,55 @@ public class Usuario extends JPanel {
 
         // Posiciona Spinner
         spinner.setBounds(400, 320, 300, 25);
+    }
+
+    public void configurar () {
+        btnIncluir.addActionListener(e -> {
+            UsuarioController usuarioController = new UsuarioController();
+            UsuarioModel usuarioModel = new UsuarioModel();
+            usuarioModel.setUsuNome(tfNome.getText());
+            usuarioModel.setUsuLogin(tflogin.getText());
+            usuarioModel.setUsuSenha(String.valueOf(pfSenha.getPassword()));
+            usuarioModel.setUsuCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            usuarioModel.setUsuAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+
+            try {
+                usuarioController.cadastrarUsuario(usuarioModel);
+                JOptionPane.showMessageDialog(this.getParent(),"Usuario cadastrado");
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Deu ruim para cadastrar");
+
+            }
+
+        });
+
+        btnExcluir.addActionListener(e -> {
+            UsuarioController usuarioController = new UsuarioController();
+            try {
+                usuarioController.excluirUsuario(Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"Usuario excluido");
+
+            } catch (Exception exx) {
+                JOptionPane.showMessageDialog(this.getParent(),"Não deu certo a exclusão");
+            }
+        });
+
+        btnAlterar.addActionListener(e -> {
+            UsuarioController usuarioController = new UsuarioController();
+            UsuarioModel usuarioModel = new UsuarioModel();
+            usuarioModel.setUsuNome(tfNome.getText());
+            usuarioModel.setUsuLogin(tflogin.getText());
+            usuarioModel.setUsuSenha(String.valueOf(pfSenha.getPassword()));
+            usuarioModel.setUsuCadastro(new java.sql.Date(((java.util.Date) spinner.getValue()).getTime()).toLocalDate());
+            usuarioModel.setUsuAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+
+            try {
+                usuarioController.alterarUsuario(Integer.valueOf(tfId.getText()),usuarioModel);
+                JOptionPane.showMessageDialog(this.getParent(),"Usuario atualizado");
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(this.getParent(),"Não deu certo atualizar");
+            }
+        });
     }
 }

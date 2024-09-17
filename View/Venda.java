@@ -9,7 +9,7 @@ public class Venda extends JPanel {
 
     private JTextField tfId, tfValor, tfDesconto, tfTotal;
 
-    private JComboBox cbIdUsu, cbIdCli;
+    private JTextField cbIdUsu, cbIdCli;
 
     private JTextArea taObs;
 
@@ -72,8 +72,8 @@ public class Venda extends JPanel {
         tfTotal = new JTextField();
 
         // ComboBox
-        cbIdUsu = new JComboBox();
-        cbIdCli = new JComboBox();
+        cbIdUsu = new JTextField();
+        cbIdCli = new JTextField();
 
         // TextArea, ScrollPane e Table
         taObs = new JTextArea();

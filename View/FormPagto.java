@@ -1,9 +1,13 @@
 package modulovendas;
 
+import modulovendas.Controllers.FormaPagtoController;
+import modulovendas.Models.FormaPagtoModel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class FormPagto extends JPanel {
 
@@ -23,6 +27,7 @@ public class FormPagto extends JPanel {
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
+        configurar();
     }
 
     public void instanciar() {
@@ -136,5 +141,46 @@ public class FormPagto extends JPanel {
         btnAlterar.setBounds(660, 0, 100, 20);
         btnConsultar.setBounds(760, 0, 100, 20);
         btnExcluir.setBounds(860, 0, 100, 20);
+    }
+
+    public void configurar () {
+        btnIncluir.addActionListener(e -> {
+            FormaPagtoModel formaPagtoModel = new FormaPagtoModel();
+            FormaPagtoController formaPagtoController = new FormaPagtoController();
+            formaPagtoModel.setFpgNome(tfFormaPagto.getText());
+            formaPagtoModel.setFpgAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+            try {
+                formaPagtoController.cadastrarFormaPagto(formaPagtoModel);
+                JOptionPane.showMessageDialog(this.getParent(),"Forma de pagamento cadastrado");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro ao cadastrar");
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnExcluir.addActionListener(e -> {
+            FormaPagtoController formaPagtoController = new FormaPagtoController();
+            try {
+                formaPagtoController.excluirFormaPagto(Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"Deletado");
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro ao deletar");
+            }
+        });
+
+        btnAlterar.addActionListener(e -> {
+            FormaPagtoController formaPagtoController = new FormaPagtoController();
+            FormaPagtoModel formaPagtoModel = new FormaPagtoModel();
+            formaPagtoModel.setFpgNome(tfFormaPagto.getText());
+            formaPagtoModel.setFpgAtivo(cbAtivo.getSelectedItem().toString().equals("Ativo") ? 'y' : 'n');
+            try {
+                formaPagtoController.atualizarFormaPagto(Integer.valueOf(tfId.getText()),formaPagtoModel);
+                JOptionPane.showMessageDialog(this.getParent(),"Atualizado");
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro ao atualizar");
+            }
+        });
+
     }
 }

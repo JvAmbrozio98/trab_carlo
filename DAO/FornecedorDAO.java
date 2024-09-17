@@ -125,6 +125,37 @@ public class FornecedorDAO {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao atualizar registro: " + e.getMessage());
+
+        }
+    }
+
+    public void exluir(Integer id) throws SQLException {
+
+        String sql1 = "DELETE FROM fornecedor WHERE PES_CODIGO = ?";
+        String sql2 = "DELETE FROM pessoa WHERE PES_CODIGO = ?";
+        try (PreparedStatement pstmt1 = connectionModule.prepareStatement(sql1)) {
+            pstmt1.setInt(1, id);
+            int affectedRows1 = pstmt1.executeUpdate();
+
+            if (affectedRows1 > 0) {
+                System.out.println("Delete from fornecedor successful.");
+            } else {
+                System.out.println("No records deleted from fornecedor.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error deleting from cliente: " + e.getMessage());
+        }
+        try (PreparedStatement pstmt2 = connectionModule.prepareStatement(sql2)) {
+            pstmt2.setInt(1, id);
+            int affectedRows2 = pstmt2.executeUpdate();
+
+            if (affectedRows2 > 0) {
+                System.out.println("Delete from pessoa successful.");
+            } else {
+                System.out.println("No records deleted from pessoa.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error deleting from pessoa: " + e.getMessage());
         }
     }
 
