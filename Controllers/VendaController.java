@@ -21,5 +21,14 @@ public class VendaController {
         }
     }
 
+    public void deletarVenda (Long id) {
+        try {
+            this.vendaDAO.deletarVenda(id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

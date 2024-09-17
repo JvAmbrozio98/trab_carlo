@@ -216,10 +216,23 @@ public class Venda extends JPanel {
             vendaModels.setVdaObs(taObs.getText());
             try {
                 vendaController.cadastrarVenda(vendaModels);
+                JOptionPane.showMessageDialog(this.getParent(),"A venda foi cadastrada");
             } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro ao cadastrar");
                 throw new RuntimeException(ex);
             }
 
+        });
+
+        btnExcluir.addActionListener(e -> {
+            VendaController vendaController = new VendaController();
+            try {
+                vendaController.deletarVenda(Long.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(),"A venda foi cadastrada");
+            } catch (Exception expt) {
+                JOptionPane.showMessageDialog(this.getParent(),"Erro ao excluir");
+                throw new RuntimeException(expt);
+            }
         });
     };
 }
