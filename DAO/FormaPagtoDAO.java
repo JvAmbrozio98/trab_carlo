@@ -61,15 +61,16 @@ public class FormaPagtoDAO {
 
     public FormaPagtoModel consultarPorId(Integer id) throws SQLException {
     String sql = "SELECT * FROM formapagto WHERE FPG_CODIGO = ?";
-    
-    try (PreparedStatement pstmt = connectionModule.prepareStatement(sql)) {
+
+        FormaPagtoModel formaPagto = new FormaPagtoModel();
+        try (PreparedStatement pstmt = connectionModule.prepareStatement(sql)) {
         pstmt.setInt(1, id);
         try (ResultSet rs = pstmt.executeQuery()) {
             if (rs.next()) {
-                formaPagto = new FormaPagtoModel();
+               
                 formaPagto.setFpgCodigo(rs.getInt("FPG_CODIGO")); // Assumindo que há um campo FPG_CODIGO
                 formaPagto.setFpgNome(rs.getString("FPG_NOME"));
-                formaPagto.setFpgAtivo(rs.getChar("FPG_ATIVO"));
+                formaPagto.setFpgAtivo(rs.getString("FPG_ATIVO").charAt(0));
             }
         }
     }
