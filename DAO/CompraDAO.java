@@ -61,7 +61,32 @@ public class CompraDAO {
         }
     }
 
-
-
+    public CompraModel consultarCompra(int cprCodigo) throws SQLException {
+        String sql = "SELECT USU_CODIGO, FOR_CODIGO, CPR_EMISSAO, CPR_VALOR, CPR_DESCONTO, CPR_TOTAL, CPR_DTENTRADA, CPR_OBS " +
+                     "FROM compra WHERE CPR_CODIGO = ?";
+        
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, cprCodigo);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    CompraModel compra = new CompraModel();
+                    compra.setCprCodigo(cprCodigo);
+                    compra.setUsuCodigo(rs.getInt("USU_CODIGO"));
+                    compra.setForCodigo(rs.getInt("FOR_CODIGO"));
+                    compra.setCprEmissao(rs.getDate("CPR_EMISSAO").toLocalDate());
+                    compra.setCprValor(rs.getBigDecimal("CPR_VALOR"));
+                    compra.setCprDesconto(rs.getBigDecimal("CPR_DESCONTO"));
+                    compra.setCprTotal(rs.getBigDecimal("CPR_TOTAL"));
+                    compra.setCprDtEntrada(rs.getDate("CPR_DTENTRADA").toLocalDate());
+                    compra.setCprObs(rs.getString("CPR_OBS"));
+                    return compra;
+                } else {
+                    throw new SQLException("Compra com ID " + id + " não encontrada.");
+                }
+            }
+        }
+    }
+    
 
 }

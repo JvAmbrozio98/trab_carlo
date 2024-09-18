@@ -1,9 +1,12 @@
 package modulovendas;
 
 import modulovendas.Controllers.FormaPagtoController;
+import modulovendas.DAO.FormaPagtoDAO;
 import modulovendas.Models.FormaPagtoModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,54 +53,7 @@ public class FormPagto extends JPanel {
         btnConsultar = new JButton("Consultar");
         btnExcluir = new JButton("Excluir");
 
-        btnConsultar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cria e exibe uma nova janela
-                JFrame newFrame = new JFrame("Consultar Forma de Pagamento");
-                newFrame.setSize(650, 550);
-                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                newFrame.setVisible(true);
-                newFrame.setResizable(false); // Permite redimensionar a janela
-                newFrame.setLocationRelativeTo(null);
-
-                // Cria um painel com BorderLayout para adicionar componentes
-                JPanel newPanel = new JPanel(new BorderLayout()); // Usa BorderLayout para expandir a tabela
-                newFrame.add(newPanel);
-
-                // Adiciona os campos de entrada e botões na parte superior (NORTE)
-                JPanel topPanel = new JPanel();
-                topPanel.add(new JLabel("ID:"));
-                JTextField tfId = new JTextField(5);
-                topPanel.add(tfId);
-
-                topPanel.add(new JLabel("Forma de Pagamento:"));
-                JTextField tfNome = new JTextField(20);
-                topPanel.add(tfNome);
-
-                JButton btnConsultar = new JButton("Consultar");
-                topPanel.add(btnConsultar);
-
-                JButton btnLimpar = new JButton("Limpar");
-                topPanel.add(btnLimpar);
-
-                newPanel.add(topPanel, BorderLayout.NORTH); // Adiciona o painel superior ao NORTE
-
-                // Cria os dados da tabela
-                String[][] data = {
-                    {"", "", ""}
-                };
-                String[] columnNames = {"Código", "Forma de Pagamento", "Ativo"};
-
-                // Cria a tabela e adiciona um JScrollPane
-                JTable tFormPagto = new JTable(data, columnNames);
-                JScrollPane scrollPane = new JScrollPane(tFormPagto);
-
-                // Adiciona o JScrollPane ao painel principal no CENTRO
-                newPanel.add(scrollPane, BorderLayout.CENTER);
-            }
-        });
-
+        
     }
 
     public void adicionar() {
@@ -181,6 +137,99 @@ public class FormPagto extends JPanel {
                 JOptionPane.showMessageDialog(this.getParent(),"Erro ao atualizar");
             }
         });
+
+        btnConsultar.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Cria e exibe uma nova janela
+        JFrame newFrame = new JFrame("Consultar Forma de Pagamento");
+        newFrame.setSize(650, 550);
+        newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        newFrame.setVisible(true);
+        newFrame.setResizable(false); // Permite redimensionar a janela
+        newFrame.setLocationRelativeTo(null);
+
+        // Cria um painel com BorderLayout para adicionar componentes
+        JPanel newPanel = new JPanel(new BorderLayout());
+        newFrame.add(newPanel);
+
+        // Adiciona os campos de entrada e botões na parte superior (NORTE)
+        JPanel topPanel = new JPanel();
+        topPanel.add(new JLabel("ID:"));
+        JTextField tfId = new JTextField(5);
+        topPanel.add(tfId);
+
+        topPanel.add(new JLabel("Forma de Pagamento:"));
+        JTextField tfNome = new JTextField(20);
+        topPanel.add(tfNome);
+
+        JButton btnConsultar = new JButton("Consultar");
+        topPanel.add(btnConsultar);
+
+        JButton btnLimpar = new JButton("Limpar");
+        topPanel.add(btnLimpar);
+
+        newPanel.add(topPanel, BorderLayout.NORTH); // Adiciona o painel superior ao NORTE
+
+        // Cria a tabela e adiciona um JScrollPane
+        String[] columnNames = {"Código", "Forma de Pagamento", "Ativo"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        JTable tFormPagto = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(tFormPagto);
+        newPanel.add(scrollPane, BorderLayout.CENTER); // Adiciona o JScrollPane ao painel principal no CENTRO
+
+        // Ação do botão "Consultar"
+        btnConsultar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormaPagtoDAO formaPagtoDAO = new FormaPagtoDAO();
+                try {
+                    // Limpa a tabela antes de adicionar novos dados
+                    tableModel.setRowCount(0);
+
+                    // Consulta pelo ID se informado, senão consulta todos
+                    if (!tfId.getText().isEmpty()) {
+                        int id = Integer.parseInt(tfId.getText());
+                        FormaPagtoModel formaPagto = formaPagtoDAO.consultarPorId(id);
+                        if (formaPagto != null) {
+                            tableModel.addRow(new Object[]{
+                                formaPagto.getFpgCodigo(),
+                                formaPagto.getFpgNome(),
+                                formaPagto.getFpgAtivo()
+                            });
+                        } else {
+                            JOptionPane.showMessageDialog(newFrame, "Forma de Pagamento não encontrada.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } else {
+                        List<FormaPagtoModel> formasPagto = formaPagtoDAO.consultarTodos();
+                        for (FormaPagtoModel forma : formasPagto) {
+                            tableModel.addRow(new Object[]{
+                                forma.getFpgCodigo(),
+                                forma.getFpgNome(),
+                                forma.getFpgAtivo()
+                            });
+                        }
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(newFrame, "ID inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(newFrame, "Erro ao consultar formas de pagamento: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Ação do botão "Limpar"
+        btnLimpar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tfId.setText("");
+                tfNome.setText(""); // Limpa também o campo de nome
+                tableModel.setRowCount(0); // Limpa a tabela
+            }
+        });
+    }
+});
+
 
     }
 }

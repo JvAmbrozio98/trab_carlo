@@ -23,6 +23,16 @@ public class CompraController {
 
     }
 
+    public CompraModel consultarCompra(int id) {
+        try {
+            return compraDAO.consultar(id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     public void atualizarCompra (CompraModel compraModel) {
         try {
             this.compraDAO.updateCompra(compraModel);

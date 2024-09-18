@@ -5,6 +5,7 @@ import modulovendas.Models.FormaPagtoModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -57,6 +58,24 @@ public class FormaPagtoDAO {
             System.out.println("Error updating record: " + e.getMessage());
         }
     }
+
+    public FormaPagtoModel consultarPorId(Integer id) throws SQLException {
+    String sql = "SELECT * FROM formapagto WHERE FPG_CODIGO = ?";
+    
+    try (PreparedStatement pstmt = connectionModule.prepareStatement(sql)) {
+        pstmt.setInt(1, id);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                formaPagto = new FormaPagtoModel();
+                formaPagto.setFpgCodigo(rs.getInt("FPG_CODIGO")); // Assumindo que há um campo FPG_CODIGO
+                formaPagto.setFpgNome(rs.getString("FPG_NOME"));
+                formaPagto.setFpgAtivo(rs.getChar("FPG_ATIVO"));
+            }
+        }
+    }
+    
+    return formaPagto; // Retorna null se não encontrar a forma de pagamento
+}
 
 
 }
