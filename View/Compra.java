@@ -6,6 +6,8 @@ import modulovendas.Models.CompraModel;
 import modulovendas.Models.CompraProdutoModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,16 +35,16 @@ public class Compra extends JPanel {
     private JSpinner spinnerEm, spinnerEnt;
 
     private SpinnerDateModel modelEm, modelEnt;
-    
-    String[] columnNames = {"Código",
-        "Quantidade",
-        "Preço",
-        "Desconto",
-        "Total",
-        "Produto"};
+
+    String[] columnNames = { "Código",
+            "Quantidade",
+            "Preço",
+            "Desconto",
+            "Total",
+            "Produto" };
 
     Object[][] data = {
-        {"", "", "", "", "", ""},
+            { "", "", "", "", "", "" },
     };
 
     public Compra() {
@@ -65,7 +67,7 @@ public class Compra extends JPanel {
         lblDesconto = new JLabel("Desconto");
         lblTotal = new JLabel("Total");
         lblDataEnt = new JLabel("Data Entrada");
-        lblObs = new JLabel("Observações"); //Tipo Text no Banco
+        lblObs = new JLabel("Observações"); // Tipo Text no Banco
         lblProdutos = new JLabel("Produtos");
 
         // TextFields
@@ -138,7 +140,7 @@ public class Compra extends JPanel {
 
         // Adiciona ScrollPane e Table
         add(spObs);
-        //add(tProdutos);
+        // add(tProdutos);
         add(scrollPane);
 
         // Buttons
@@ -200,9 +202,11 @@ public class Compra extends JPanel {
 
     }
 
-    public void configurar () {
-        AtomicInteger currendId = new AtomicInteger();
-        btnIncluir.addActionListener(e -> {
+
+
+    public void configurar() {
+            AtomicInteger currendId = new AtomicInteger();
+            btnIncluir.addActionListener(e -> {
             CompraController compraController = new CompraController();
             CompraModel compra = new CompraModel();
             compra.setUsuCodigo(Integer.valueOf(cbIdUsu.getText()));
@@ -240,7 +244,8 @@ public class Compra extends JPanel {
                 JOptionPane.showMessageDialog(this.getParent(), "Compra atualizada");
             } catch (Exception err) {
                 System.out.println(err.getMessage());
-                JOptionPane.showMessageDialog(this.getParent(), "Erro ao cadastrar compra");}
+                JOptionPane.showMessageDialog(this.getParent(), "Erro ao cadastrar compra");
+            }
         });
 
         btnExcluir.addActionListener(e -> {
@@ -343,5 +348,171 @@ public class Compra extends JPanel {
                 });
             }
         });
+
+        btnIncluirP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cria e exibe uma nova janela
+                JFrame newFrame = new JFrame("Cadastro de Produto");
+                newFrame.setSize(400, 300); // Ajuste o tamanho conforme necessário
+                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                newFrame.setVisible(true);
+                newFrame.setResizable(false);
+                newFrame.setLocationRelativeTo(null);
+
+                // Cria um painel para adicionar componentes à nova janela
+                JPanel newPanel = new JPanel(new GridLayout(6, 2, 10, 10));
+                newFrame.add(newPanel);
+
+                // Adiciona os componentes ao painel
+                newPanel.add(new JLabel("Produto:"));
+                JTextField tfProduto = new JTextField();
+                newPanel.add(tfProduto);
+
+                newPanel.add(new JLabel("Quantidade:"));
+                JTextField tfQuantidade = new JTextField();
+                newPanel.add(tfQuantidade);
+
+                newPanel.add(new JLabel("Preço:"));
+                JTextField tfPreco = new JTextField();
+                newPanel.add(tfPreco);
+
+                newPanel.add(new JLabel("Desconto (%):"));
+                JTextField tfDesconto = new JTextField();
+                newPanel.add(tfDesconto);
+
+                newPanel.add(new JLabel("Total:"));
+                JTextField tfTotal = new JTextField();
+                tfTotal.setEditable(false); // Total não deve ser editável
+                newPanel.add(tfTotal);
+
+                // Adiciona botões para cadastrar e limpar
+                JButton btnCadastrar = new JButton("Cadastrar");
+                newPanel.add(btnCadastrar);
+
+                JButton btnLimpar = new JButton("Limpar");
+                newPanel.add(btnLimpar);
+
+                // Adiciona ação ao botão Cadastrar
+                btnCadastrar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            String produto = tfProduto.getText();
+                            int quantidade = Integer.parseInt(tfQuantidade.getText());
+                            double preco = Double.parseDouble(tfPreco.getText());
+                            double desconto = Double.parseDouble(tfDesconto.getText());
+
+                            // Calcula o total com desconto
+                            double total = quantidade * preco * (1 - desconto / 100);
+                            tfTotal.setText(String.format("%.2f", total));
+
+                            // Simula o cadastro do produto (pode ser substituído por código real de
+                            // cadastro)
+                            // Exemplo de exibição de mensagem de sucesso
+                            JOptionPane.showMessageDialog(newFrame,
+                                    String.format(
+                                            "Produto cadastrado com sucesso!\nProduto: %s\nQuantidade: %d\nPreço: %.2f\nDesconto: %.2f%%\nTotal: %.2f",
+                                            produto, quantidade, preco, desconto, total),
+                                    "Cadastro Concluído",
+                                    JOptionPane.INFORMATION_MESSAGE);
+
+                            // Limpa os campos após o cadastro
+                            tfProduto.setText("");
+                            tfQuantidade.setText("");
+                            tfPreco.setText("");
+                            tfDesconto.setText("");
+                            tfTotal.setText("");
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(newFrame, "Por favor, insira valores válidos.", "Erro",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                });
+
+                // Adiciona ação ao botão Limpar
+                btnLimpar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tfProduto.setText("");
+                        tfQuantidade.setText("");
+                        tfPreco.setText("");
+                        tfDesconto.setText("");
+                        tfTotal.setText("");
+                    }
+                });
+            }
+        });
+
+        btnConsultar.addActionListener(e -> {
+            // Cria e exibe uma nova janela
+            JFrame newFrame = new JFrame("Consultar Compra");
+            newFrame.setSize(600, 400);
+            newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            newFrame.setLocationRelativeTo(null); // Centraliza a janela
+            newFrame.setVisible(true);
+
+            // Cria um painel para adicionar componentes à nova janela
+            JPanel newPanel = new JPanel(new BorderLayout());
+            newFrame.add(newPanel);
+
+            // Painel de cima com campo para ID e botão de consulta
+            JPanel topPanel = new JPanel();
+            topPanel.add(new JLabel("ID da Compra:"));
+            JTextField tfIdCompra = new JTextField(10);
+            topPanel.add(tfIdCompra);
+
+            JButton btnConsultarInterno = new JButton("Consultar");
+            topPanel.add(btnConsultarInterno);
+
+            newPanel.add(topPanel, BorderLayout.NORTH);
+
+            // Cria o modelo da tabela e a JTable
+            DefaultTableModel tableModel = new DefaultTableModel(
+                    new String[] { "Código", "Usuário", "Fornecedor", "Data Emissão","Data Entrada", "Valor", "Desconto", "Total" },
+                    0);
+            JTable tCompra = new JTable(tableModel);
+            JScrollPane scrollPane = new JScrollPane(tCompra);
+            newPanel.add(scrollPane, BorderLayout.CENTER);
+
+            // Ação do botão "Consultar"
+            btnConsultarInterno.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        int idCompra = Integer.parseInt(tfIdCompra.getText());
+                        CompraController compraController = new CompraController();
+                        CompraModel compra = compraController.consultarCompra(idCompra); // Método a ser implementado no
+                                                                                         // controlador
+
+                        // Limpar a tabela antes de adicionar novos dados
+                        tableModel.setRowCount(0);
+
+                        if (compra != null) {
+                            tableModel.addRow(new Object[] {
+                                    compra.getCprCodigo(),
+                                    compra.getUsuCodigo(),
+                                    compra.getForCodigo(),
+                                    compra.getCprEmissao(),
+                                    compra.getCprDtEntrada(),
+                                    compra.getCprValor(),
+                                    compra.getCprDesconto(),
+                                    compra.getCprTotal()
+                            });
+                        } else {
+                            JOptionPane.showMessageDialog(newFrame, "Compra não encontrada.", "Aviso",
+                                    JOptionPane.WARNING_MESSAGE);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(newFrame, "ID da compra inválido.", "Erro",
+                                JOptionPane.ERROR_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(newFrame, "Erro ao consultar compra: " + ex.getMessage(), "Erro",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+        });
+
     }
 }

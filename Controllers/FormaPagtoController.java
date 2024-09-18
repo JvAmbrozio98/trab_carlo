@@ -2,6 +2,7 @@ package modulovendas.Controllers;
 
 import modulovendas.DAO.FormaPagtoDAO;
 import modulovendas.FormPagto;
+import modulovendas.Models.CompraModel;
 import modulovendas.Models.FormaPagtoModel;
 
 import java.sql.SQLException;
@@ -16,6 +17,17 @@ public class FormaPagtoController {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public FormaPagtoModel consultarPorId(int id) {
+        try {
+            return FormaPagtoDAO.consultar(id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
+
     }
 
     public void excluirFormaPagto (Integer id) {
