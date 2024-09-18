@@ -1,10 +1,17 @@
 package modulovendas;
 
 import modulovendas.Controllers.CompraController;
+import modulovendas.Controllers.CompraProdutoController;
 import modulovendas.Models.CompraModel;
+import modulovendas.Models.CompraProdutoModel;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Compra extends JPanel {
 
@@ -103,97 +110,7 @@ public class Compra extends JPanel {
         JSpinner.DateEditor editor2 = new JSpinner.DateEditor(spinnerEnt, "yyyy-MM-dd");
         spinnerEnt.setEditor(editor2);
 
-        btnIncluirP.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cria e exibe uma nova janela
-                JFrame newFrame = new JFrame("Cadastro de Produto");
-                newFrame.setSize(400, 300); // Ajuste o tamanho conforme necessário
-                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                newFrame.setVisible(true);
-                newFrame.setResizable(false);
-                newFrame.setLocationRelativeTo(null);
 
-                // Cria um painel para adicionar componentes à nova janela
-                JPanel newPanel = new JPanel(new GridLayout(6, 2, 10, 10));
-                newFrame.add(newPanel);
-
-                // Adiciona os componentes ao painel
-                newPanel.add(new JLabel("Produto:"));
-                JTextField tfProduto = new JTextField();
-                newPanel.add(tfProduto);
-
-                newPanel.add(new JLabel("Quantidade:"));
-                JTextField tfQuantidade = new JTextField();
-                newPanel.add(tfQuantidade);
-
-                newPanel.add(new JLabel("Preço:"));
-                JTextField tfPreco = new JTextField();
-                newPanel.add(tfPreco);
-
-                newPanel.add(new JLabel("Desconto (%):"));
-                JTextField tfDesconto = new JTextField();
-                newPanel.add(tfDesconto);
-
-                newPanel.add(new JLabel("Total:"));
-                JTextField tfTotal = new JTextField();
-                tfTotal.setEditable(false); // Total não deve ser editável
-                newPanel.add(tfTotal);
-
-                // Adiciona botões para cadastrar e limpar
-                JButton btnCadastrar = new JButton("Cadastrar");
-                newPanel.add(btnCadastrar);
-
-                JButton btnLimpar = new JButton("Limpar");
-                newPanel.add(btnLimpar);
-
-                // Adiciona ação ao botão Cadastrar
-                btnCadastrar.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            String produto = tfProduto.getText();
-                            int quantidade = Integer.parseInt(tfQuantidade.getText());
-                            double preco = Double.parseDouble(tfPreco.getText());
-                            double desconto = Double.parseDouble(tfDesconto.getText());
-
-                            // Calcula o total com desconto
-                            double total = quantidade * preco * (1 - desconto / 100);
-                            tfTotal.setText(String.format("%.2f", total));
-
-                            // Simula o cadastro do produto (pode ser substituído por código real de cadastro)
-                            // Exemplo de exibição de mensagem de sucesso
-                            JOptionPane.showMessageDialog(newFrame,
-                                    String.format("Produto cadastrado com sucesso!\nProduto: %s\nQuantidade: %d\nPreço: %.2f\nDesconto: %.2f%%\nTotal: %.2f",
-                                            produto, quantidade, preco, desconto, total),
-                                    "Cadastro Concluído",
-                                    JOptionPane.INFORMATION_MESSAGE);
-
-                            // Limpa os campos após o cadastro
-                            tfProduto.setText("");
-                            tfQuantidade.setText("");
-                            tfPreco.setText("");
-                            tfDesconto.setText("");
-                            tfTotal.setText("");
-                        } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(newFrame, "Por favor, insira valores válidos.", "Erro", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                });
-
-                // Adiciona ação ao botão Limpar
-                btnLimpar.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        tfProduto.setText("");
-                        tfQuantidade.setText("");
-                        tfPreco.setText("");
-                        tfDesconto.setText("");
-                        tfTotal.setText("");
-                    }
-                });
-            }
-        });
 
     }
 
@@ -284,6 +201,7 @@ public class Compra extends JPanel {
     }
 
     public void configurar () {
+        AtomicInteger currendId = new AtomicInteger();
         btnIncluir.addActionListener(e -> {
             CompraController compraController = new CompraController();
             CompraModel compra = new CompraModel();
@@ -296,8 +214,9 @@ public class Compra extends JPanel {
             compra.setCprTotal(BigDecimal.valueOf(Long.parseLong(tfTotal.getText())));
             compra.setCprObs(taObs.getText());
             try {
-                compraController.cadastrarCompra(compra);
-                JOptionPane.showMessageDialog(this.getParent(), "Compra cadastrada");
+                currendId.set(compraController.cadastrarCompra(compra));
+                JOptionPane.showMessageDialog(this.getParent(), "Compra cadastrada: " + currendId.toString());
+                tfId.setText(currendId.toString());
             } catch (Exception err) {
                 JOptionPane.showMessageDialog(this.getParent(), "Erro ao cadastrar compra");
             }
@@ -334,6 +253,95 @@ public class Compra extends JPanel {
                 JOptionPane.showMessageDialog(this.getParent(), "Erro ao deletar conta");
             }
 
+        });
+
+        btnIncluirP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cria e exibe uma nova janela
+                JFrame newFrame = new JFrame("Cadastro de Produto");
+                newFrame.setSize(400, 300); // Ajuste o tamanho conforme necessário
+                newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                newFrame.setVisible(true);
+                newFrame.setResizable(false);
+                newFrame.setLocationRelativeTo(null);
+
+                // Cria um painel para adicionar componentes à nova janela
+                JPanel newPanel = new JPanel(new GridLayout(6, 2, 10, 10));
+                newFrame.add(newPanel);
+
+                // Adiciona os componentes ao painel
+                newPanel.add(new JLabel("Produto:"));
+                JTextField tfProduto = new JTextField();
+                newPanel.add(tfProduto);
+
+                newPanel.add(new JLabel("Quantidade:"));
+                JTextField tfQuantidade = new JTextField();
+                newPanel.add(tfQuantidade);
+
+                newPanel.add(new JLabel("Preço:"));
+                JTextField tfPreco = new JTextField();
+                newPanel.add(tfPreco);
+
+                newPanel.add(new JLabel("Desconto (%):"));
+                JTextField tfDesconto = new JTextField();
+                newPanel.add(tfDesconto);
+
+                newPanel.add(new JLabel("Total:"));
+                JTextField tfTotal = new JTextField();
+                tfTotal.setEditable(true); // Total não deve ser editável
+                newPanel.add(tfTotal);
+
+                // Adiciona botões para cadastrar e limpar
+                JButton btnCadastrar = new JButton("Cadastrar");
+                newPanel.add(btnCadastrar);
+
+                JButton btnLimpar = new JButton("Limpar");
+                newPanel.add(btnLimpar);
+
+                // Adiciona ação ao botão Cadastrar
+                btnCadastrar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            CompraProdutoModel compraProdutoModel = new CompraProdutoModel();
+                            CompraProdutoController compraProdutoController = new CompraProdutoController();
+
+                            compraProdutoModel.setProdutoCodigo(Integer.valueOf(tfProduto.getText()));
+                            compraProdutoModel.setQuantidade(BigDecimal.valueOf(Long.parseLong(tfQuantidade.getText())));
+                            compraProdutoModel.setPreco(BigDecimal.valueOf(Long.parseLong(tfPreco.getText())));
+                            compraProdutoModel.setDesconto(BigDecimal.valueOf(Long.parseLong(tfDesconto.getText())));
+                            compraProdutoModel.setTotal(BigDecimal.valueOf(Long.parseLong(tfTotal.getText())));
+                            compraProdutoModel.setCompraCodigo(currendId.get());
+                            compraProdutoController.cadastraProdutoEmCompra(compraProdutoModel);
+                            JOptionPane.showMessageDialog(null,"Produto adcionado em compra cadastrado");
+                            // Limpa os campos após o cadastro
+                            tfProduto.setText("");
+                            tfQuantidade.setText("");
+                            tfPreco.setText("");
+                            tfDesconto.setText("");
+                            tfTotal.setText("");
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(newFrame, "Por favor, insira valores válidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        } catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(newFrame, "Por favor, insira valores válidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                });
+
+                // Adiciona ação ao botão Limpar
+                btnLimpar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tfProduto.setText("");
+                        tfQuantidade.setText("");
+                        tfPreco.setText("");
+                        tfDesconto.setText("");
+                        tfTotal.setText("");
+                    }
+                });
+            }
         });
     }
 }

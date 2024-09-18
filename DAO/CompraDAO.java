@@ -11,11 +11,14 @@ public class CompraDAO {
         this.connection = new ConnectionModule().connect();
     }
 
-    public void addCompra(CompraModel compra) throws SQLException {
+    public int addCompra(CompraModel compra) throws SQLException {
+        // SQL query to insert a new record into the 'compra' table
         String sql = "INSERT INTO compra (USU_CODIGO, FOR_CODIGO, CPR_EMISSAO, CPR_VALOR, CPR_DESCONTO, CPR_TOTAL, CPR_DTENTRADA, CPR_OBS) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
+        // Create a PreparedStatement that returns generated keys
         try (PreparedStatement pstmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            // Set the values for the placeholders in the SQL query
             pstmt.setInt(1, compra.getUsuCodigo());
             pstmt.setInt(2, compra.getForCodigo());
             pstmt.setDate(3, Date.valueOf(compra.getCprEmissao()));
@@ -25,16 +28,24 @@ public class CompraDAO {
             pstmt.setDate(7, Date.valueOf(compra.getCprDtEntrada()));
             pstmt.setString(8, compra.getCprObs());
 
+            // Execute the INSERT statement
             pstmt.executeUpdate();
 
+            // Retrieve the generated keys (e.g., the primary key 'CPR_CODIGO')
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    compra.setCprCodigo(rs.getInt(1));
+                    // Set the generated key (CPR_CODIGO) into the CompraModel object
+                    int generatedId = rs.getInt(1);
+                    compra.setCprCodigo(generatedId);
+                    // Return the generated key
+                    return generatedId;
+                } else {
+                    throw new SQLException("Failed to retrieve generated key.");
                 }
             }
         }
-
     }
+
     public void updateCompra(CompraModel compra) throws SQLException {
         String sql = "UPDATE compra SET USU_CODIGO = ?, FOR_CODIGO = ?, CPR_EMISSAO = ?, CPR_VALOR = ?, CPR_DESCONTO = ?, " +
                 "CPR_TOTAL = ?, CPR_DTENTRADA = ?, CPR_OBS = ? WHERE CPR_CODIGO = ?";

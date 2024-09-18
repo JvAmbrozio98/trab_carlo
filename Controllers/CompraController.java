@@ -12,16 +12,22 @@ public class CompraController {
         this.compraDAO = new CompraDAO();
     }
 
-    public void cadastrarCompra (CompraModel compraModel) {
+    public int cadastrarCompra(CompraModel compraModel) {
         try {
-            this.compraDAO.addCompra(compraModel);
-            System.out.println("Fooooii");
+            // Capture the generated key from addCompra
+            int generatedId = this.compraDAO.addCompra(compraModel);
+
+            // Log the generated key
+            System.out.println("Compra cadastrada com sucesso. ID gerado: " + generatedId);
+
+            // Return the generated key
+            return generatedId;
         } catch (SQLException e) {
-            System.out.println("Erro para cadastrar compra");
+            System.out.println("Erro ao cadastrar compra.");
             throw new RuntimeException(e);
         }
-
     }
+
 
     public void atualizarCompra (CompraModel compraModel) {
         try {
