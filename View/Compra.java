@@ -1,6 +1,10 @@
 package modulovendas;
 
+import modulovendas.Controllers.CompraController;
+import modulovendas.Models.CompraModel;
+
 import javax.swing.*;
+import java.math.BigDecimal;
 
 public class Compra extends JPanel {
 
@@ -8,7 +12,7 @@ public class Compra extends JPanel {
 
     private JTextField tfId, tfValor, tfDesconto, tfTotal;
 
-    private JComboBox cbIdUsu, cbIdCli;
+    private JTextField cbIdUsu, cbIdCli;
 
     private JTextArea taObs;
 
@@ -40,6 +44,7 @@ public class Compra extends JPanel {
         instanciar(); // Instancia componentes
         adicionar(); // Adiciona componentes
         posicionar(); // Posiciona componentes
+        configurar();
     }
 
     public void instanciar() {
@@ -47,7 +52,7 @@ public class Compra extends JPanel {
         // Labels
         lblId = new JLabel("ID Venda");
         lblUsu = new JLabel("Usuário");
-        lblCli = new JLabel("Cliente");
+        lblCli = new JLabel("Fornecedor");
         lblDataEm = new JLabel("Data Emissão");
         lblValor = new JLabel("Valor");
         lblDesconto = new JLabel("Desconto");
@@ -63,8 +68,8 @@ public class Compra extends JPanel {
         tfTotal = new JTextField();
 
         // ComboBox
-        cbIdUsu = new JComboBox();
-        cbIdCli = new JComboBox();
+        cbIdUsu = new JTextField();
+        cbIdCli = new JTextField();
 
         // TextArea, ScrollPane e Table
         taObs = new JTextArea();
@@ -184,5 +189,59 @@ public class Compra extends JPanel {
         spinnerEm.setBounds(150, 140, 300, 25);
         spinnerEnt.setBounds(150, 180, 300, 25);
 
+    }
+
+    public void configurar () {
+        btnIncluir.addActionListener(e -> {
+            CompraController compraController = new CompraController();
+            CompraModel compra = new CompraModel();
+            compra.setUsuCodigo(Integer.valueOf(cbIdUsu.getText()));
+            compra.setForCodigo(Integer.valueOf(cbIdCli.getText()));
+            compra.setCprEmissao(new java.sql.Date(((java.util.Date) spinnerEm.getValue()).getTime()).toLocalDate());
+            compra.setCprDtEntrada(new java.sql.Date(((java.util.Date) spinnerEnt.getValue()).getTime()).toLocalDate());
+            compra.setCprValor(BigDecimal.valueOf(Long.parseLong(tfValor.getText())));
+            compra.setCprDesconto(BigDecimal.valueOf(Long.parseLong(tfValor.getText())));
+            compra.setCprTotal(BigDecimal.valueOf(Long.parseLong(tfTotal.getText())));
+            compra.setCprObs(taObs.getText());
+            try {
+                compraController.cadastrarCompra(compra);
+                JOptionPane.showMessageDialog(this.getParent(), "Compra cadastrada");
+            } catch (Exception err) {
+                JOptionPane.showMessageDialog(this.getParent(), "Erro ao cadastrar compra");
+            }
+
+        });
+
+        btnAlterar.addActionListener(e -> {
+            CompraController compraController = new CompraController();
+            CompraModel compra = new CompraModel();
+            compra.setUsuCodigo(Integer.valueOf(cbIdUsu.getText()));
+            compra.setForCodigo(Integer.valueOf(cbIdCli.getText()));
+            compra.setCprEmissao(new java.sql.Date(((java.util.Date) spinnerEm.getValue()).getTime()).toLocalDate());
+            compra.setCprDtEntrada(new java.sql.Date(((java.util.Date) spinnerEnt.getValue()).getTime()).toLocalDate());
+            compra.setCprValor(BigDecimal.valueOf(Long.parseLong(tfValor.getText())));
+            compra.setCprDesconto(BigDecimal.valueOf(Long.parseLong(tfValor.getText())));
+            compra.setCprTotal(BigDecimal.valueOf(Long.parseLong(tfTotal.getText())));
+            compra.setCprObs(taObs.getText());
+            compra.setCprCodigo(Integer.valueOf(tfId.getText()));
+            try {
+                compraController.atualizarCompra(compra);
+                JOptionPane.showMessageDialog(this.getParent(), "Compra atualizada");
+            } catch (Exception err) {
+                System.out.println(err.getMessage());
+                JOptionPane.showMessageDialog(this.getParent(), "Erro ao cadastrar compra");}
+        });
+
+        btnExcluir.addActionListener(e -> {
+            CompraController compraController = new CompraController();
+            try {
+                compraController.deletarCompra(Integer.valueOf(tfId.getText()));
+                JOptionPane.showMessageDialog(this.getParent(), "Compra deletada");
+            } catch (Exception err) {
+                System.out.println(err.getMessage());
+                JOptionPane.showMessageDialog(this.getParent(), "Erro ao deletar conta");
+            }
+
+        });
     }
 }

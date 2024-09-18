@@ -20,13 +20,13 @@ public class VendaDAO {
 
         // Prepare the statement to return generated keys
         try (PreparedStatement pstmt = connectionModule.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            pstmt.setInt(1, venda.usuCodigo);
-            pstmt.setInt(2, venda.cliCodigo);
-            pstmt.setDate(3, Date.valueOf(venda.vdaData)); // Ensure venda.vdaData is LocalDate
-            pstmt.setBigDecimal(4, venda.vdaValor);
-            pstmt.setBigDecimal(5, venda.vdaDesconto);
-            pstmt.setBigDecimal(6, venda.vdaTotal);
-            pstmt.setString(7, venda.vdaObs);
+            pstmt.setInt(1, venda.getUsuCodigo());
+            pstmt.setInt(2, venda.getCliCodigo());
+            pstmt.setDate(3, Date.valueOf(venda.getVdaData())); // Ensure venda.vdaData is LocalDate
+            pstmt.setBigDecimal(4, venda.getVdaValor());
+            pstmt.setBigDecimal(5, venda.getVdaDesconto());
+            pstmt.setBigDecimal(6, venda.getVdaTotal());
+            pstmt.setString(7, venda.getVdaObs());
 
             pstmt.executeUpdate();
 

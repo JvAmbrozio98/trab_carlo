@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -31,9 +33,9 @@ public class Cliente extends JPanel {
 
     private SpinnerDateModel model;
 
-    String[] pesFJ = { "Física", "Jurídica" };
+    String[] pesFJ = {"Física", "Jurídica"};
 
-    String[] ativo = { "Ativo", "Não Ativo" };
+    String[] ativo = {"Ativo", "Não Ativo"};
 
     public Cliente() {
         setLayout(null); // Definindo layout absoluto, embora seja recomendado usar outros layouts
@@ -319,16 +321,15 @@ public class Cliente extends JPanel {
             JFrame newFrame = new JFrame("Consultar Cliente");
             newFrame.setSize(1200, 500);
             newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            newFrame.setLocationRelativeTo(null); // Centraliza a janela
             newFrame.setVisible(true);
-            newFrame.setLocationRelativeTo(null);
 
             // Cria um painel para adicionar componentes à nova janela
             JPanel newPanel = new JPanel(new BorderLayout());
             newFrame.add(newPanel);
 
-            // Adiciona vários componentes ao painel da nova janela
+            // Painel de cima com campos e botões
             JPanel topPanel = new JPanel();
-            // Adiciona vários componentes ao painel da nova janela
             topPanel.add(new JLabel("ID:"));
             JTextField tfId = new JTextField(5);
             topPanel.add(tfId);
@@ -347,9 +348,8 @@ public class Cliente extends JPanel {
 
             // Cria o modelo da tabela e a JTable
             DefaultTableModel tableModel = new DefaultTableModel(
-                    new String[] { "Nome", "Nome Fantasia", "CPF/CNPJ", "Data Cadastro", "Limite Crédito" }, 0);
+                    new String[]{"Nome", "Nome Fantasia", "CPF/CNPJ", "Data Cadastro", "Limite Crédito"}, 0);
             JTable tUsuario = new JTable(tableModel);
-
             JScrollPane scrollPane = new JScrollPane(tUsuario);
             newPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -359,11 +359,13 @@ public class Cliente extends JPanel {
                 public void actionPerformed(ActionEvent e) {
                     try {
                         int id = Integer.parseInt(tfId.getText());
-                        ClienteModel cliente = clienteController.consultarCliente(id);
+                        ClienteModel cliente = new ClienteController().consultarCliente(id);
+
+                        // Limpar a tabela antes de adicionar novos dados
+                        tableModel.setRowCount(0);
+
                         if (cliente != null) {
-                            // Limpar a tabela antes de adicionar novos dados
-                            tableModel.setRowCount(0);
-                            tableModel.addRow(new Object[] {
+                            tableModel.addRow(new Object[]{
                                     cliente.getPesNome(),
                                     cliente.getPesFantasia(),
                                     cliente.getPesCpfCnpj(),
@@ -371,13 +373,14 @@ public class Cliente extends JPanel {
                                     cliente.getCliLimiteCred()
                             });
                         } else {
-                            // Limpar a tabela e exibir mensagem de cliente não encontrado
-                            tableModel.setRowCount(0);
                             JOptionPane.showMessageDialog(newFrame, "Cliente não encontrado.", "Aviso",
                                     JOptionPane.WARNING_MESSAGE);
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(newFrame, "ID inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(newFrame, "Erro ao consultar cliente: " + ex.getMessage(), "Erro",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             });
@@ -385,9 +388,9 @@ public class Cliente extends JPanel {
             // Ação do botão "Limpar"
             btnLimpar.addActionListener(f -> {
                 tfId.setText("");
+                tfNome.setText(""); // Limpar também o campo de nome
                 tableModel.setRowCount(0); // Limpar a tabela
             });
-
         });
     }
 }
